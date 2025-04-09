@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 > 🇰🇷 [한국어로 보기](./README.ko.md)
 
 # KOROMAN - Korean Romanizer
@@ -152,3 +153,7 @@ String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 
 ## 🧪 Testing
 ```
+=======
+# koroman
+한국어 로마자 변환기 Korean Romanizer with pronunciation rules based on 국립국어원 표기법
+>>>>>>> e445a59a5355323b58d505f24b64647cccf83852
