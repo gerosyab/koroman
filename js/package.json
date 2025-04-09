@@ -1,0 +1,48 @@
+{
+    "name": "koroman",
+    "version": "1.0.0",
+    "description": "KOROMAN: Korean Romanizer with pronunciation rules based on 국립국어원 표기법",
+    "main": "./koroman.cjs",
+    "type": "module",
+    "exports": {
+      ".": {
+        "import": "./koroman.mjs",
+        "require": "./koroman.cjs"
+      }
+    },
+    "files": [
+      "koroman.mjs",
+      "koroman.cjs",
+      "koroman.core.js"
+    ],
+    "author": {
+      "name": "Donghe Youn",
+      "email": "gerosyab@gmail.com",
+      "url": "https://daissue.app/romanizer"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/gerosyab/koroman.git"
+    },
+    "keywords": [
+      "korean",
+      "romanizer",
+      "romanization",
+      "hangul",
+      "transliteration",
+      "linguistics",
+      "korean romanizer",
+      "korean romanization",
+      "korean transliteration",
+      "korean linguistics",
+      "korean romanizer",
+      "korean romanization",
+      "koroman"
+    ],
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/gerosyab/koroman/issues"
+    },
+    "homepage": "https://github.com/gerosyab/koroman#readme"
+  }
+  
