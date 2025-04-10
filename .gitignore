@@ -16,6 +16,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 .npm
+test-npm-package/
 =======
 # Logs
 logs
@@ -211,6 +212,7 @@ out/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+gradle.bat
 
 # IDE
 .idea/

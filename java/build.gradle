@@ -5,6 +5,7 @@ plugins {
 
 group = 'app.daissue'
 version = '1.0.0'
+sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
@@ -14,9 +15,26 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
+}
+
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 publishing {
@@ -24,5 +42,16 @@ publishing {
         maven(MavenPublication) {
             from components.java
         }
+    }
+}
+
+test {
+    useJUnit()
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        exceptionFormat "full"
     }
 }

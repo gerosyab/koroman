@@ -219,7 +219,7 @@ const CHO = [
       'ᅬ': 'oe', 'ᅭ': 'yo', 'ᅮ': 'u', 'ᅯ': 'wo', 'ᅰ': 'we',
       'ᅱ': 'wi', 'ᅲ': 'yu', 'ᅳ': 'eu', 'ᅴ': 'ui', 'ᅵ': 'i',
   
-      'ᆨ': 'k', 'ᆩ': 'k', 'ᆪ': 'k', 'ᆫ': 'n', 'ᆬ': 'n', 'ᆭ': 'n', 'ᆮ': 't',
+      'ᆨ': 'k', 'ᆩ': 'k', 'ᆪ': 'k', 'ᆫ': 'n', 'ᆬ': 'n', 'ᆭ': 'n', 'ᆮ': 'd',
       'ᆯ': 'l', 'ᆰ': 'k', 'ᆱ': 'm', 'ᆲ': 'p', 'ᆳ': 't', 'ᆴ': 't', 'ᆵ': 'p', 'ᆶ': 'h',
       'ᆷ': 'm', 'ᆸ': 'p', 'ᆹ': 'p', 'ᆺ': 't', 'ᆻ': 't', 'ᆼ': 'ng',
       'ᆽ': 't', 'ᆾ': 't', 'ᆿ': 'k', 'ᇀ': 't', 'ᇁ': 'p', 'ᇂ': 'h'
@@ -227,11 +227,11 @@ const CHO = [
     return [...jamoStr].map(ch => map[ch] ?? ch).join('');
   }
   
-  function romanize(str, { usePronunciationRules = false, casingOption = "lowercase" } = {}) {
+  function romanize(str, { usePronunciationRules = true, casingOption = "lowercase" } = {}) {
     const { jamoString } = splitHangulToJamos(str);
     const replaced = usePronunciationRules ? applyPronunciationRules(jamoString) : jamoString;
     const romanized = applyRomanMapping(replaced);
     return formatRoman(romanized, casingOption);
   }
 
-  module.exports = { romanize };
+  export { romanize }; 

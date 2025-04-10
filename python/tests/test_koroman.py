@@ -19,7 +19,7 @@ class TestKoroman(unittest.TestCase):
         self.assertEqual(romanize("해돋이", use_pronunciation_rules=False), "haedodi")
         self.assertEqual(romanize("문래역"), "mullaeyeok")
         self.assertEqual(romanize("문래역", use_pronunciation_rules=False), "munraeyeok")
-        self.assertEqual(romanize("선릉역"), "seollleungyeok")
+        self.assertEqual(romanize("선릉역"), "seolleungyeok")
         self.assertEqual(romanize("선릉역", use_pronunciation_rules=False), "seonreungyeok")
         self.assertEqual(romanize("역량"), "yeongnyang")
         self.assertEqual(romanize("역량", use_pronunciation_rules=True), "yeongnyang")
@@ -39,4 +39,7 @@ class TestKoroman(unittest.TestCase):
         )
 
 if __name__ == '__main__':
+    print(romanize("여기는 선릉역 입니다.\n\r해돋이와 문래역 그리고 역량 개발."))
+    print(romanize("해돋이"))
     unittest.main()
+
