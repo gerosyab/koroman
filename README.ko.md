@@ -22,12 +22,37 @@
 ## 📁 프로젝트 구조
 ```
 koroman/
-├── README.md           ← 프로젝트 개요 (영문)
-├── README.ko.md        ← 🇰🇷 한국어 문서 (이 파일)
-├── js/                 ← JavaScript 소스
-├── python/             ← Python 소스
-├── java/               ← Java 소스
-├── test/               ← 언어별 테스트 파일
+├── java/                      # Java implementation
+│   ├── src/
+│   │   ├── main/
+│   │   │   └── java/
+│   │   │       └── app/
+│   │   │           └── daissue/
+│   │   │               └── koroman/
+│   │   │                   ├── Koroman.java
+│   │   │                   └── CasingOption.java
+│   │   └── test/
+│   │       └── java/
+│   │           └── app/
+│   │               └── daissue/
+│   │                   └── koroman/
+│   │                       └── KoromanTest.java
+│   └── build.gradle
+│
+├── js/                        # JavaScript implementation
+│   ├── koroman.core.js        # Core implementation
+│   ├── koroman.js             # Main module
+│   └── test/
+│       └── js/
+│           └── test_koroman.js
+│
+└── python/                    # Python implementation
+      ├── koroman/              
+      │   ├── __init__.py       
+      │   └── core.py           
+      └── test/                 
+          └── python/           
+              └── test_koroman.py
 ```
 
 ---
@@ -97,7 +122,7 @@ romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase") 
 
 ### Java (JitPack)
 ```gradle
-implementation 'com.github.gerosyab:koroman:1.0.0'
+implementation 'app.daissue:koroman:1.0.0'
 ```
 ```java
 import app.daissue.koroman.Koroman;
@@ -131,15 +156,6 @@ options = new HashMap<>();
 options.put("usePronunciationRules", false);
 options.put("casingOption", "uppercase");
 String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
-```
-
----
-
-## 🧪 테스트
-```bash
-npm test        # JavaScript 테스트
-pytest          # Python 테스트
-./gradlew test  # Java 테스트
 ```
 
 ---

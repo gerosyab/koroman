@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 > 🇰🇷 [한국어로 보기](./README.ko.md)
 
 # KOROMAN - Korean Romanizer
@@ -27,23 +26,37 @@
 ## 📁 Project Structure
 ```
 koroman/
-├── README.md            ← Project overview (this file)
-├── js/                  ← JavaScript core & dual-module support (ESM/CJS)
-│   ├── koroman.core.js
-│   ├── koroman.mjs
-│   ├── koroman.cjs
-│   └── package.json
-├── python/              ← Python version
-│   ├── koroman/__init__.py
-│   ├── setup.py
-│   └── pyproject.toml
-├── java/                ← Java version (JDK 8+)
-│   ├── build.gradle / pom.xml
-│   └── src/main/java/app/daissue/koroman/Koroman.java
-├── test/                ← Language-specific test files
-│   ├── js/test_koroman.js
-│   ├── python/test_koroman.py
-│   └── java/KoromanTest.java
+├── java/                      # Java implementation
+│   ├── src/
+│   │   ├── main/
+│   │   │   └── java/
+│   │   │       └── app/
+│   │   │           └── daissue/
+│   │   │               └── koroman/
+│   │   │                   ├── Koroman.java
+│   │   │                   └── CasingOption.java
+│   │   └── test/
+│   │       └── java/
+│   │           └── app/
+│   │               └── daissue/
+│   │                   └── koroman/
+│   │                       └── KoromanTest.java
+│   └── build.gradle
+│
+├── js/                        # JavaScript implementation
+│   ├── koroman.core.js        # Core implementation
+│   ├── koroman.js             # Main module
+│   └── test/
+│       └── js/
+│           └── test_koroman.js
+│
+└── python/                    # Python implementation
+      ├── koroman/              
+      │   ├── __init__.py       
+      │   └── core.py           
+      └── test/                 
+          └── python/           
+              └── test_koroman.py
 ```
 
 ---
@@ -113,7 +126,7 @@ romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase") 
 
 ### Java (JitPack)
 ```gradle
-implementation 'com.github.gerosyab:koroman:1.0.0'
+implementation 'app.daissue:koroman:1.0.0'
 ```
 ```java
 import app.daissue.koroman.Koroman;
@@ -151,9 +164,8 @@ String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 
 ---
 
-## 🧪 Testing
-```
-=======
-# koroman
-한국어 로마자 변환기 Korean Romanizer with pronunciation rules based on 국립국어원 표기법
->>>>>>> e445a59a5355323b58d505f24b64647cccf83852
+## 📜 LICENSE
+[MIT License](LICENSE)
+
+2025 ⓒ Donghe Youn (Daissue)
+
