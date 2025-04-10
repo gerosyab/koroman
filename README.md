@@ -33,8 +33,7 @@ koroman/
 │   │   │       └── app/
 │   │   │           └── daissue/
 │   │   │               └── koroman/
-│   │   │                   ├── Koroman.java
-│   │   │                   └── CasingOption.java
+│   │   │                   └── Koroman.java
 │   │   └── test/
 │   │       └── java/
 │   │           └── app/
@@ -44,43 +43,41 @@ koroman/
 │   └── build.gradle
 │
 ├── js/                        # JavaScript implementation
-│   ├── koroman.core.js        # Core implementation
-│   ├── koroman.js             # Main module
-│   └── test/
-│       └── js/
-│           └── test_koroman.js
+│   ├── dist                   
+│   │   └── koroman.brower.js  # Distribution for browers
+│   ├── src    
+│   │   ├── koroman.cjs        # CommonJS support
+│   │   ├── koroman.core.js    # Core implementation
+│   │   ├── koroman.d.ts       # Typescript support
+│   │   └── koroman.mjs        # ESM supoort
+│   └── tests/
+│       └── test_koroman.js
 │
 └── python/                    # Python implementation
-      ├── koroman/              
-      │   ├── __init__.py       
-      │   └── core.py           
-      └── test/                 
-          └── python/           
-              └── test_koroman.py
-```
-
----
-
-## 🔤 Example Usage
-
-### Input
-```
-해돋이와 문래역 그리고 선릉역, 역량 개발
-```
-
-### Output (Romanized)
-```
-haedojiwa munnaeyeok geurigo seollleungyeok, yeongnyang gaebal
+    ├── koroman/              
+    │   ├── __init__.py       
+    │   └── core.py           
+    └── test/                          
+        └── test_koroman.py
 ```
 
 ---
 
 ## 🚀 Getting Started
 
+### JavaScript (jsDeliver)
+```html
+<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@v1.0.11/dist/koroman.browser.js"></script>
+<script>
+  const result = koroman.romanize("안녕하세요");
+  console.log(result); // → annyeonghaseyo
+</script>
+```
 ### JavaScript (Node.js)
 ```bash
 npm install koroman
 ```
+#### CommonJS
 ```js
 const koroman = require('koroman');
 
@@ -98,7 +95,22 @@ koroman.romanize("한글", { casingOption: "uppercase" }); // → "HANGUL"
 koroman.romanize("안녕 한글", { casingOption: "capitalize-word" }); // → "Annyeong hangeul"
 koroman.romanize("안녕\n한글 로마자 변환", { casingOption: "capitalize-line" }); // → "Annyeong\nHangeul Romaja Byeonhwan"
 ```
+#### ESM (requires "type": "module" in package.json)
+```js
+import { romanize } from 'koroman';
 
+romanize("한글"); // → "hangul"
+
+```
+#### Typescript
+```ts
+import { romanize } from 'koroman';
+
+const result: string = romanize("로마자", {
+  usePronunciationRules: true,
+  casingOption: "capitalize-line"
+}); // → "Romaja"
+```
 ### Python
 ```bash
 pip install koroman

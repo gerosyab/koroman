@@ -18,7 +18,7 @@
   - Lateralization (유음화)
   - Fortis/tense consonants (경음화)
 - Provides casing options (lower, upper, capitalized)
-- Cross-platform support (Node.js, Python, Java)
+- ESM/CJS support
 - Fully tested in each language
 
 ---
@@ -29,17 +29,26 @@
   - 연음화 (예: 해돋이 → haedoji)
   - 비음화, 유음화, 경음화 등
 - 대소문자 옵션 지원 (소문자, 대문자, 단어/줄 단위 대문자 등)
-- 자바스크립트, 파이썬, 자바 모두 지원 (ESM/CJS 대응)
+- 자바스크립트 ESM/CJS 대응 지원원
 - 각 언어별 테스트 코드 포함
 
 ---
 
 ## 🚀 Getting Started
 
+### JavaScript (jsDeliver)
+```html
+<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@v1.0.11/dist/koroman.browser.js"></script>
+<script>
+  const result = koroman.romanize("안녕하세요");
+  console.log(result); // → annyeonghaseyo
+</script>
+```
 ### JavaScript (Node.js)
 ```bash
 npm install koroman
 ```
+#### CommonJS
 ```js
 const koroman = require('koroman');
 
@@ -57,7 +66,22 @@ koroman.romanize("한글", { casingOption: "uppercase" }); // → "HANGUL"
 koroman.romanize("안녕 한글", { casingOption: "capitalize-word" }); // → "Annyeong hangeul"
 koroman.romanize("안녕\n한글 로마자 변환", { casingOption: "capitalize-line" }); // → "Annyeong\nHangeul Romaja Byeonhwan"
 ```
+#### ESM (requires "type": "module" in package.json)
+```js
+import { romanize } from 'koroman';
 
+romanize("한글"); // → "hangul"
+
+```
+#### Typescript
+```ts
+import { romanize } from 'koroman';
+
+const result: string = romanize("로마자", {
+  usePronunciationRules: true,
+  casingOption: "capitalize-line"
+}); // → "Romaja"
+```
 ---
 
 ## 📜 LICENSE

@@ -1,6 +1,6 @@
 {
   "name": "koroman",
-  "version": "1.0.1",
+  "version": "1.0.11",
   "description": "KOROMAN: Korean Romanizer with pronunciation rules based on 국립국어원 표기법",
   "main": "src/koroman.cjs",
   "module": "src/koroman.mjs",
