@@ -1,6 +1,6 @@
 {
   "name": "koroman",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "KOROMAN: Korean Romanizer with pronunciation rules based on 국립국어원 표기법",
   "main": "src/koroman.cjs",
   "module": "src/koroman.mjs",
@@ -32,14 +32,24 @@
     "url": "git+https://github.com/gerosyab/koroman.git"
   },
   "keywords": [
-    "korean", "romanizer", "romanization", "hangul",
-    "transliteration", "linguistics", "korean romanizer",
-    "korean romanization", "korean transliteration",
-    "korean linguistics", "koroman"
+    "korean",
+    "romanizer",
+    "romanization",
+    "hangul",
+    "transliteration",
+    "linguistics",
+    "korean romanizer",
+    "korean romanization",
+    "korean transliteration",
+    "korean linguistics",
+    "koroman"
   ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gerosyab/koroman/issues"
   },
-  "homepage": "https://github.com/gerosyab/koroman#readme"
+  "homepage": "https://github.com/gerosyab/koroman#readme",
+  "devDependencies": {
+    "rollup": "^4.39.0"
+  }
 }
