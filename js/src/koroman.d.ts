@@ -1,5 +1,5 @@
 declare module 'koroman' {
-  export type CasingOption = 'lowercase' | 'uppercase' | 'capitalize-words' | 'capitalize-lines';
+  export type CasingOption = 'lowercase' | 'uppercase' | 'capitalize-word' | 'capitalize-line';
 
   export interface RomanizeOptions {
     usePronunciationRules?: boolean;

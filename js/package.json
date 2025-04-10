@@ -6,20 +6,22 @@
   "module": "src/koroman.mjs",
   "types": "src/koroman.d.ts",
   "type": "module",
-  "scripts": {
-      "test": "node tests/test_koroman.js"
-  },
   "exports": {
     ".": {
-      "import": "src/koroman.mjs",
-      "require": "src/koroman.cjs"
+      "import": "./src/koroman.mjs",
+      "require": "./src/koroman.cjs",
+      "types": "./src/koroman.d.ts"
     }
   },
   "files": [
     "src/koroman.mjs",
     "src/koroman.cjs",
+    "src/koroman.d.ts",
     "src/koroman.core.js"
   ],
+  "scripts": {
+    "test": "node test/js/test_koroman.js"
+  },
   "author": {
     "name": "Donghe Youn",
     "email": "gerosyab@gmail.com",
@@ -27,22 +29,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gerosyab/koroman.git"
+    "url": "git+https://github.com/gerosyab/koroman.git"
   },
   "keywords": [
-    "korean",
-    "romanizer",
-    "romanization",
-    "hangul",
-    "transliteration",
-    "linguistics",
-    "korean romanizer",
-    "korean romanization",
-    "korean transliteration",
-    "korean linguistics",
-    "korean romanizer",
-    "korean romanization",
-    "koroman"
+    "korean", "romanizer", "romanization", "hangul",
+    "transliteration", "linguistics", "korean romanizer",
+    "korean romanization", "korean transliteration",
+    "korean linguistics", "koroman"
   ],
   "license": "MIT",
   "bugs": {

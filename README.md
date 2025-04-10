@@ -82,21 +82,21 @@ haedojiwa munnaeyeok geurigo seollleungyeok, yeongnyang gaebal
 npm install koroman
 ```
 ```js
-import { romanize } from 'koroman';
+const koroman = require('koroman');
 
 // Basic usage
-romanize("한글"); // → "hangul"
+koroman.romanize("한글"); // → "hangul"
 
 // With pronunciation rules disabled
-romanize("해돋이", { usePronunciationRules: false }); // → "haedodi"
+koroman.romanize("해돋이", { usePronunciationRules: false }); // → "haedodi"
 
 // With pronunciation rules enabled (default)
-romanize("해돋이"); // → "haedoji"
+koroman.romanize("해돋이"); // → "haedoji"
 
 // With different casing options
-romanize("한글", { casingOption: "uppercase" }); // → "HANGUL"
-romanize("안녕 한글", { casingOption: "capitalize-word" }); // → "Annyeong hangeul"
-romanize("안녕\n한글 로마자 변환", { casingOption: "capitalize-line" }); // → "Annyeong\nHangeul Romaja Byeonhwan"
+koroman.romanize("한글", { casingOption: "uppercase" }); // → "HANGUL"
+koroman.romanize("안녕 한글", { casingOption: "capitalize-word" }); // → "Annyeong hangeul"
+koroman.romanize("안녕\n한글 로마자 변환", { casingOption: "capitalize-line" }); // → "Annyeong\nHangeul Romaja Byeonhwan"
 ```
 
 ### Python
