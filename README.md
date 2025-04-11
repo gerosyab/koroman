@@ -57,8 +57,9 @@ koroman/
     ├── koroman/              
     │   ├── __init__.py       
     │   └── core.py           
-    └── test/                          
-        └── test_koroman.py
+    ├── test/                          
+    │   └── test_koroman.py
+    └── setup.py
 ```
 
 ---
@@ -138,7 +139,13 @@ romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase") 
 
 ### Java (JitPack)
 ```gradle
-implementation 'app.daissue:koroman:1.0.0'
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.gerosyab.koroman:java:1.0.0'
+}
 ```
 ```java
 import app.daissue.koroman.Koroman;
@@ -173,7 +180,16 @@ options.put("usePronunciationRules", false);
 options.put("casingOption", "uppercase");
 String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 ```
+---
 
+## 📦 Version Mapping
+
+| Feature / Change                 | JS (npm)  | Python (PyPI)  | Java (JitPack) | Description                                 |
+|----------------------------------|-----------|----------------|----------------|---------------------------------------------|
+| Initial stable release           | 1.0.11    | 1.0.0          | 1.0.0          | Basic romanization based on 국립국어원 표기법  |
+
+> ℹ️ Each version is managed independently per language.  
+> Major feature additions aim to stay consistent across platforms, but release timing may vary.
 ---
 
 ## 📜 LICENSE

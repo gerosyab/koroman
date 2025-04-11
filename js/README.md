@@ -18,7 +18,7 @@
   - Lateralization (유음화)
   - Fortis/tense consonants (경음화)
 - Provides casing options (lower, upper, capitalized)
-- ESM/CJS support
+- ESM/CJS/TS support
 - Fully tested in each language
 
 ---
@@ -29,7 +29,7 @@
   - 연음화 (예: 해돋이 → haedoji)
   - 비음화, 유음화, 경음화 등
 - 대소문자 옵션 지원 (소문자, 대문자, 단어/줄 단위 대문자 등)
-- 자바스크립트 ESM/CJS 대응 지원원
+- 자바스크립트 ESM/CJS/TS 대응 지원
 - 각 언어별 테스트 코드 포함
 
 ---

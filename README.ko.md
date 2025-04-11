@@ -53,22 +53,9 @@ koroman/
     ├── koroman/              
     │   ├── __init__.py       
     │   └── core.py           
-    └── test/                          
-        └── test_koroman.py
-```
-
----
-
-## 🔤 사용 예시
-
-### 입력
-```
-해돋이와 문래역 그리고 선릉역, 역량 개발
-```
-
-### 출력 (로마자 변환)
-```
-haedojiwa munnaeyeok geurigo seollleungyeok, yeongnyang gaebal
+    ├── test/                          
+    │   └── test_koroman.py
+    └── setup.py
 ```
 
 ---
@@ -109,19 +96,7 @@ koroman.romanize("안녕\n한글 로마자 변환", { casingOption: "capitalize-
 ```js
 import { romanize } from 'koroman';
 
-// 기본 사용법
 romanize("한글"); // → "hangul"
-
-// 발음 규칙 비활성화
-romanize("해돋이", { usePronunciationRules: false }); // → "haedodi"
-
-// 발음 규칙 활성화 (기본값)
-romanize("해돋이"); // → "haedoji"
-
-// 대소문자 옵션
-romanize("한글", { casingOption: "uppercase" }); // → "HANGUL"
-romanize("안녕 한글", { casingOption: "capitalize-word" }); // → "Annyeong hangeul"
-romanize("안녕\n한글 로마자 변환", { casingOption: "capitalize-line" }); // → "Annyeong\nHangeul Romaja Byeonhwan"
 ```
 #### Typescript
 ```ts
@@ -160,7 +135,13 @@ romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase") 
 
 ### Java (JitPack)
 ```gradle
-implementation 'app.daissue:koroman:1.0.11'
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.gerosyab.koroman:java:1.0.0'
+}
 ```
 ```java
 import app.daissue.koroman.Koroman;
@@ -195,7 +176,16 @@ options.put("usePronunciationRules", false);
 options.put("casingOption", "uppercase");
 String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 ```
+---
 
+## 📦 버전 매핑
+
+| 기능 / 변경사항                  | JS (npm)  | Python (PyPI)  | Java (JitPack) | 설명                                              |
+|----------------------------------|-----------|----------------|----------------|---------------------------------------------------|
+| 최초 안정 릴리스                 | 1.0.11    | 1.0.0          | 1.0.0          | 국립국어원 표기법 기반의 기본 로마자 변환 기능     |
+
+> ℹ️ 각 언어의 버전은 독립적으로 관리됩니다.  
+> 주요 기능은 가능한 한 모든 언어에서 일관되게 제공되도록 유지하지만, 릴리스 시점은 다를 수 있습니다.
 ---
 
 ## 📜 라이선스
