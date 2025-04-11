@@ -44,7 +44,7 @@ koroman/
 │
 ├── js/                        # JavaScript implementation
 │   ├── dist                   
-│   │   └── koroman.brower.js  # Distribution for browers
+│   │   └── koroman.browser.js  # Distribution for browsers
 │   ├── src    
 │   │   ├── koroman.cjs        # CommonJS support
 │   │   ├── koroman.core.js    # Core implementation
@@ -68,7 +68,7 @@ koroman/
 
 ### JavaScript (jsDeliver)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.11/js/dist/koroman.browser.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.12/js/dist/koroman.browser.js"></script>
 <script>
   const result = koroman.romanize("안녕하세요");
   console.log(result); // → annyeonghaseyo
@@ -137,7 +137,7 @@ romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # 
 romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase")  # → "HAEDODI"
 ```
 
-### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.11)
+### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.12)
 ```gradle
 repositories {
     mavenCentral()
@@ -145,7 +145,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.gerosyab:koroman:java-v1.0.11'
+    implementation 'com.github.gerosyab:koroman:java-v1.0.12'
 }
 
 tasks.withType(JavaCompile) {
@@ -191,7 +191,7 @@ String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 
 | Feature / Change                 | JS (npm)  | Python (PyPI)  | Java (JitPack) | Description                                 |
 |----------------------------------|-----------|----------------|----------------|---------------------------------------------|
-| Initial stable release           | 1.0.11    | 1.0.0          | 1.0.11          | Basic romanization based on 국립국어원 표기법  |
+| Initial stable release           | 1.0.12    | 1.0.0          | 1.0.12          | Basic romanization based on 국립국어원 표기법  |
 
 > ℹ️ Each version is managed independently per language.  
 > Major feature additions aim to stay consistent across platforms, but release timing may vary.

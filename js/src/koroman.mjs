@@ -1,6 +1,6 @@
 // js/koroman.mjs
 // KOROMAN: Korean Romanizer (ESM Entry)
 
-import { romanize } from './koroman.core.js';
+import { romanize, splitHangulToJamos, composeJamos, formatRoman, applyPronunciationRules, applyRomanMapping } from './koroman.core.js';
 
-export { romanize };
+export { romanize, splitHangulToJamos, composeJamos, formatRoman, applyPronunciationRules, applyRomanMapping };

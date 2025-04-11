@@ -4,7 +4,7 @@
 // @date: 2025-04-02
 // @description: This code provides functions to decompose Hangul syllables into their constituent jamo (consonants and vowels), recompose them, and convert them into Romanized forms. It includes pronunciation rules for accurate Romanization and allows for different casing options.
 // @license: MIT License
-// @version: 1.0.0
+// @version: 1.0.12
 // @dependencies: None
 // @usage: This code can be used in any JavaScript environment (Node.js, browser) to romanize Korean text. It provides functions for splitting Hangul into jamo, recomposing them, and converting them to Romanized forms with various options for pronunciation rules and casing.
 // 자모 분해 및 조합 + 로마자 변환 (초성/중성/종성 실제 유니코드 문자 사용 버전)
@@ -44,7 +44,7 @@ public class Koroman {
         "ᆿ", "ᇀ", "ᇁ", "ᇂ"
     };
 
-    private static final Map<String, String> ROMAN_MAP = new HashMap<String, String>() {{
+    public static final Map<String, String> ROMAN_MAP = new HashMap<String, String>() {{
         // 초성
         put("ᄀ", "g"); put("ᄁ", "kk"); put("ᄂ", "n"); put("ᄃ", "d"); put("ᄄ", "tt");
         put("ᄅ", "r"); put("ᄆ", "m"); put("ᄇ", "b"); put("ᄈ", "pp"); put("ᄉ", "s"); put("ᄊ", "ss");
@@ -64,7 +64,7 @@ public class Koroman {
         put("ᆽ", "t"); put("ᆾ", "t"); put("ᆿ", "k"); put("ᇀ", "t"); put("ᇁ", "p"); put("ᇂ", "h");
     }};
 
-    private static final Map<Pattern, String> PRONUNCIATION_RULES = new LinkedHashMap<Pattern, String>() {{
+    public static final Map<Pattern, String> PRONUNCIATION_RULES = new LinkedHashMap<Pattern, String>() {{
         put(Pattern.compile("\u11a7"), "");  // 1. 무효화 처리
         put(Pattern.compile("[\u11b8\u11c1\u11b9\u11b2\u11b5](?=[\u1102\u1106])"), "\u11b7");  // 2. 비음화
         put(Pattern.compile("[\u11ae\u11c0\u11bd\u11be\u11ba\u11bb\u11c2](?=[\u1102\u1106])"), "\u11ab");  // 3. 비음화
@@ -111,7 +111,7 @@ public class Koroman {
         put(Pattern.compile("\u11c2(?!\\s|$)"), "");  // 44. 특수 처리
     }};
 
-    private static String applyPronunciationRules(String jamoStr) {
+    public static String applyPronunciationRules(String jamoStr) {
         String result = jamoStr;
         System.out.println("Input: " + toUnicodeString(jamoStr));  // Debug log
         for (Map.Entry<Pattern, String> rule : PRONUNCIATION_RULES.entrySet()) {
@@ -157,7 +157,7 @@ public class Koroman {
         return applyCasing(result, casingOption);
     }
 
-    private static String splitHangulToJamos(String text) {
+    public static String splitHangulToJamos(String text) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
@@ -179,7 +179,7 @@ public class Koroman {
         return result.toString();
     }
 
-    private static String convertJamosToRoman(String text) {
+    public static String convertJamosToRoman(String text) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
             String c = String.valueOf(text.charAt(i));
@@ -188,7 +188,7 @@ public class Koroman {
         return result.toString();
     }
 
-    private static String applyCasing(String text, CasingOption option) {
+    public static String applyCasing(String text, CasingOption option) {
         switch (option) {
             case UPPERCASE:
                 return text.toUpperCase();
@@ -213,7 +213,7 @@ public class Koroman {
         }
     }
 
-    private static String toUnicodeString(String str) {
+    public static String toUnicodeString(String str) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);

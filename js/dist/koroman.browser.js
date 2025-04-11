@@ -71,6 +71,26 @@ var koroman = (function (exports) {
       return { jamoArray: result, jamoString, plainJamoString };
     }
     
+    function composeJamos(jamoArray) {
+      let result = '';
+      for (let jamo of jamoArray) {
+        if (jamo.type === 'non-hangul') {
+          result += jamo.char;
+          continue;
+        }
+        const choIndex = CHO.indexOf(jamo.초성);
+        const jungIndex = JUNG.indexOf(jamo.중성);
+        const jongIndex = jamo.종성 ? JONG.indexOf(jamo.종성) : 0;
+        if (choIndex < 0 || jungIndex < 0 || jongIndex < 0) {
+          result += '?';
+          continue;
+        }
+        const code = 0xAC00 + (choIndex * 21 + jungIndex) * 28 + jongIndex;
+        result += String.fromCharCode(code);
+      }
+      return result;
+    }
+    
     function applyPronunciationRules(jamoStr) {
       const replaceArr = [
 
@@ -217,7 +237,12 @@ var koroman = (function (exports) {
       return formatRoman(romanized, casingOption);
     }
 
+  exports.applyPronunciationRules = applyPronunciationRules;
+  exports.applyRomanMapping = applyRomanMapping;
+  exports.composeJamos = composeJamos;
+  exports.formatRoman = formatRoman;
   exports.romanize = romanize;
+  exports.splitHangulToJamos = splitHangulToJamos;
 
   return exports;
 

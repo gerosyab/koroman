@@ -40,7 +40,7 @@ koroman/
 │
 ├── js/                        # JavaScript implementation
 │   ├── dist                   
-│   │   └── koroman.brower.js  # Distribution for browers
+│   │   └── koroman.browser.js  # Distribution for browsers
 │   ├── src    
 │   │   ├── koroman.cjs        # CommonJS support
 │   │   ├── koroman.core.js    # Core implementation
@@ -64,7 +64,7 @@ koroman/
 
 ### JavaScript (jsDeliver)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.11/js/dist/koroman.browser.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.12/js/dist/koroman.browser.js"></script>
 <script>
   const result = koroman.romanize("안녕하세요");
   console.log(result); // → annyeonghaseyo
@@ -133,7 +133,7 @@ romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # 
 romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase")  # → "HAEDODI"
 ```
 
-### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.11)
+### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.12)
 ```gradle
 repositories {
     mavenCentral()
@@ -141,7 +141,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.gerosyab:koroman:java-v1.0.11'
+    implementation 'com.github.gerosyab:koroman:java-v1.0.12'
 }
 
 tasks.withType(JavaCompile) {
@@ -186,7 +186,7 @@ String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 
 | 기능 / 변경사항                  | JS (npm)  | Python (PyPI)  | Java (JitPack) | 설명                                              |
 |----------------------------------|-----------|----------------|----------------|---------------------------------------------------|
-| 최초 안정 릴리스                 | 1.0.11    | 1.0.0          | 1.0.11          | 국립국어원 표기법 기반의 기본 로마자 변환 기능     |
+| 최초 안정 릴리스                 | 1.0.12    | 1.0.0          | 1.0.12          | 국립국어원 표기법 기반의 기본 로마자 변환 기능     |
 
 > ℹ️ 각 언어의 버전은 독립적으로 관리됩니다.  
 > 주요 기능은 가능한 한 모든 언어에서 일관되게 제공되도록 유지하지만, 릴리스 시점은 다를 수 있습니다.

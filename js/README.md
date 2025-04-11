@@ -38,7 +38,7 @@
 
 ### JavaScript (jsDeliver)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@v1.0.11/dist/koroman.browser.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.12/js/dist/koroman.browser.js"></script>
 <script>
   const result = koroman.romanize("안녕하세요");
   console.log(result); // → annyeonghaseyo

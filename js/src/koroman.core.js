@@ -234,4 +234,4 @@ const CHO = [
     return formatRoman(romanized, casingOption);
   }
 
-  export { romanize }; 
+  export { romanize, splitHangulToJamos, composeJamos, formatRoman, applyPronunciationRules, applyRomanMapping }; 
