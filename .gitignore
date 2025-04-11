@@ -225,4 +225,8 @@ bin/
 *.code-workspace 
 =======
 .pnp.*
+
+# EXCEPT
+!js/dist
+!js/dist/*
 >>>>>>> e445a59a5355323b58d505f24b64647cccf83852
