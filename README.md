@@ -137,14 +137,19 @@ romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # 
 romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase")  # → "HAEDODI"
 ```
 
-### Java (JitPack)
+### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.11)
 ```gradle
 repositories {
+    mavenCentral()
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'com.github.gerosyab.koroman:java:java-v1.0.0'
+    implementation 'com.github.gerosyab:koroman:java-v1.0.11'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 ```
 ```java
@@ -186,7 +191,7 @@ String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 
 | Feature / Change                 | JS (npm)  | Python (PyPI)  | Java (JitPack) | Description                                 |
 |----------------------------------|-----------|----------------|----------------|---------------------------------------------|
-| Initial stable release           | 1.0.11    | 1.0.0          | 1.0.0          | Basic romanization based on 국립국어원 표기법  |
+| Initial stable release           | 1.0.11    | 1.0.0          | 1.0.11          | Basic romanization based on 국립국어원 표기법  |
 
 > ℹ️ Each version is managed independently per language.  
 > Major feature additions aim to stay consistent across platforms, but release timing may vary.
