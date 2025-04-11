@@ -8,3 +8,6 @@ dependencyResolutionManagement {
     }
 }
 
+dependencies {
+        implementation 'com.github.gerosyab:koroman:main-d1d455ac7f-1'
+}

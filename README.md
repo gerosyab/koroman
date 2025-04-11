@@ -144,7 +144,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.gerosyab.koroman:java:1.0.0'
+    implementation 'com.github.gerosyab.koroman:java:java-v1.0.0'
 }
 ```
 ```java
