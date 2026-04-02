@@ -2,7 +2,7 @@
 
 # KOROMAN - Standard Korean Romanizer
 
-**KOROMAN** is a multilingual Romanizer for Korean text, strictly following the **Latest Revised Romanization system ([Notice 2024-27](docs/국어의_로마자_표기법(문화체육관광부고시_제2024-27호).md))** and the legacy standard (Notice 2000-8). It supports **JavaScript, Python, and Java** with a unified core engine.
+**KOROMAN** is a multilingual Romanizer for Korean text, strictly following the **Latest Revised Romanization system ([Notice 2024-27](demo/docs/notice_2024_27.md))** and the legacy standard (Notice 2000-8). It supports **JavaScript, Python, and Java** with a unified core engine.
 
 ## 🌟 What's New (v1.1.0)
 - **Notice 2024-27 Compliance**: Correctly preserves 'h' (ㅎ) in nouns as per the latest government exception rule (e.g., `Mukho`, `Jiphyeonjeon`).
