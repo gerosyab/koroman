@@ -186,6 +186,8 @@ def capitalize_lines(text):
                 result.append(char.lower())
     return "".join(result)
 
+from .dictionary import DICTIONARY
+
 def romanize(text, **options):
     """
     Convert Korean text to Romanized form.
@@ -195,23 +197,67 @@ def romanize(text, **options):
         **options: Optional parameters:
             - use_pronunciation_rules (bool): Whether to apply pronunciation rules (default: True)
             - casing_option (str): Casing option (default: "lowercase")
+            - use_dictionary (bool): Whether to use place name dictionary (default: False)
     
     Returns:
         str: Romanized text
     """
     use_pronunciation_rules = options.get('use_pronunciation_rules', True)
     casing_option = options.get('casing_option', "lowercase")
+    use_dictionary = options.get('use_dictionary', False)
     
-    jamo_str = split_hangul_to_jamos(text)
-    if use_pronunciation_rules:
-        jamo_str = apply_pronunciation_rules(jamo_str)
-    result = "".join(ROMAN_MAP.get(c, c) for c in jamo_str)
+    if not text:
+        return ""
+
+    processed_text = text
+    protections = []
+
+    if use_dictionary:
+        # DICTIONARY keys are already sorted by length descending
+        for ko, en in DICTIONARY.items():
+            if ko in processed_text:
+                escaped_ko = re.escape(ko)
+                
+                def replace_func(match):
+                    idx = len(protections)
+                    # Capitalize first letter as it is a proper noun
+                    capitalized = en[0].upper() + en[1:] if en else ""
+                    protections.append(capitalized)
+                    return f"__KRM_{idx}__"
+                
+                processed_text = re.sub(escaped_ko, replace_func, processed_text)
+
+    # Split by placeholders
+    parts = re.split(r'(__KRM_\d+__)', processed_text)
+    romanized_parts = []
     
+    for part in parts:
+        match = re.match(r'__KRM_(\d+)__', part)
+        if match:
+            idx = int(match.group(1))
+            romanized_parts.append(protections[idx])
+        else:
+            jamo_str = split_hangul_to_jamos(part)
+            if use_pronunciation_rules:
+                jamo_str = apply_pronunciation_rules(jamo_str)
+            romanized_part = "".join(ROMAN_MAP.get(c, c) for c in jamo_str)
+            
+            # Apply casing to non-dictionary part
+            if casing_option == "uppercase":
+                romanized_part = romanized_part.upper()
+            elif casing_option == "capitalize-word":
+                romanized_part = capitalize_words(romanized_part)
+            elif casing_option == "capitalize-line":
+                romanized_part = capitalize_lines(romanized_part)
+            else:
+                romanized_part = romanized_part.lower()
+                
+            romanized_parts.append(romanized_part)
+
+    final_result = "".join(romanized_parts)
+    
+    # Global uppercase enforcement
     if casing_option == "uppercase":
-        return result.upper()
-    elif casing_option == "capitalize-word":
-        return capitalize_words(result)
-    elif casing_option == "capitalize-line":
-        return capitalize_lines(result)
-    else:  # LOWERCASE
-        return result.lower()
+        final_result = final_result.upper()
+        
+    return final_result

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOROMAN - 국어의 로마자 표기법 데모</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            backdrop-filter: blur(12px);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out;
+            margin-top: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        p.subtitle {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Sample Tags - Moved up */
+        .samples {
+            margin: 1.5rem 0 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+        }
+
+        .sample-tag {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-dim);
+        }
+
+        .sample-tag:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* 2-Column Layout on Desktop */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .input-side, .result-side {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: inherit;
+            resize: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        select, input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        select {
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid var(--glass-border);
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            font-family: inherit;
+            min-width: 160px;
+        }
+
+        .result-area {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem 2rem;
+            position: relative;
+            flex-grow: 1;
+            transition: all 0.3s ease;
+            min-height: 200px;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #fff;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.7;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            background: var(--primary-hover);
+        }
+
+        footer {
+            margin-top: 3rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        /* Floating background circles */
+        .circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.3;
+        }
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            right: -100px;
+        }
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            bottom: -50px;
+            left: -50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+
+    <div class="container" id="app">
+        <header>
+            <h1>KOROMAN</h1>
+            <p class="subtitle">국어의 로마자 표기법 [문화관광부 고시 제2000-8호]에 기반</p>
+        </header>
+
+        <!-- Samples moved here -->
+        <div class="samples">
+            <span class="sample-tag">해돋이</span>
+            <span class="sample-tag">문래역</span>
+            <span class="sample-tag">선릉역</span>
+            <span class="sample-tag">역량 개발</span>
+            <span class="sample-tag">안녕하십니까?</span>
+            <span class="sample-tag">로마자 표기법</span>
+        </div>
+
+        <div class="main-layout">
+            <!-- Left Side: Input & Options -->
+            <div class="input-side">
+                <div class="input-group">
+                    <label for="input">한국어 입력</label>
+                    <textarea id="input" rows="4" placeholder="변환할 한글을 입력하세요 (예: 안녕하세요)"></textarea>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-item">
+                        <label for="usePronunciation" style="margin: 0; cursor: pointer; text-transform: none;">발음 규칙 적용</label>
+                        <input type="checkbox" id="usePronunciation" checked>
+                    </div>
+                    <div class="option-item">
+                        <label for="useDictionary" style="margin: 0; cursor: pointer; text-transform: none;">지명 사전(고유명사) 자동 인식</label>
+                        <input type="checkbox" id="useDictionary" checked>
+                    </div>
+                    <div class="option-item">
+                        <label for="casing" style="margin: 0; text-transform: none;">대소문자 옵션</label>
+                        <select id="casing">
+                            <option value="default" selected>선택하세요(기본)</option>
+                            <option value="lowercase">전체 소문자 (all lower)</option>
+                            <option value="uppercase">전체 대문자 (ALL UPPER)</option>
+                            <option value="capitalize-word">어절 첫 글자 (Capitalize Words)</option>
+                            <option value="capitalize-line">줄 첫 글자 (Capitalize lines)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Result -->
+            <div class="result-side">
+                <label>로마자 변환 결과</label>
+                <div class="result-area">
+                    <button class="copy-btn" id="copyBtn">COPY</button>
+                    <div class="result-text" id="output">이곳에 결과가 표시됩니다...</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>2025 ⓒ <a href="https://github.com/gerosyab/koroman" target="_blank">KOROMAN Open Source Project</a></p>
+        </footer>
+    </div>
+
+    <!-- KOROMAN Library -->
+    <script src="../js/dist/koroman.browser.js"></script>
+    <script>
+        const inputEl = document.getElementById('input');
+        const outputEl = document.getElementById('output');
+        const usePronunciationEl = document.getElementById('usePronunciation');
+        const useDictionaryEl = document.getElementById('useDictionary');
+        const casingEl = document.getElementById('casing');
+        const copyBtn = document.getElementById('copyBtn');
+
+        function update() {
+            const text = inputEl.value;
+            if (!text) {
+                outputEl.textContent = '이곳에 결과가 표시됩니다...';
+                outputEl.style.opacity = '0.5';
+                return;
+            }
+            
+            outputEl.style.opacity = '1';
+            try {
+                const options = {
+                    usePronunciationRules: usePronunciationEl.checked,
+                    useDictionary: useDictionaryEl.checked,
+                };
+                
+                // Only pass casingOption if not "default"
+                if (casingEl.value !== 'default') {
+                    options.casingOption = casingEl.value;
+                }
+                
+                const result = koroman.romanize(text, options);
+                outputEl.textContent = result;
+            } catch (err) {
+                console.error(err);
+                outputEl.textContent = '변환 오류가 발생했습니다.';
+            }
+        }
+
+        inputEl.addEventListener('input', update);
+        usePronunciationEl.addEventListener('change', update);
+        useDictionaryEl.addEventListener('change', update);
+        casingEl.addEventListener('change', update);
+
+        // Sample Tags
+        document.querySelectorAll('.sample-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                inputEl.value = tag.textContent;
+                update();
+            });
+        });
+
+        // Copy Function
+        copyBtn.addEventListener('click', () => {
+            const text = outputEl.textContent;
+            if (text && text !== '이곳에 결과가 표시됩니다...') {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'COPIED!';
+                    copyBtn.style.background = '#10b981';
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.style.background = '';
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -139,22 +139,56 @@ public class Koroman {
     }
 
     public static String romanize(String text, boolean usePronunciationRules, CasingOption casingOption) {
+        return romanize(text, usePronunciationRules, casingOption, false);
+    }
+
+    public static String romanize(String text, boolean usePronunciationRules, CasingOption casingOption, boolean useDictionary) {
         if (text == null || text.isEmpty()) {
             return text;
         }
 
-        String jamoStr = splitHangulToJamos(text);
-        System.out.println("Original jamo: " + toUnicodeString(jamoStr));  // Debug log
-        
-        if (usePronunciationRules) {
-            String beforeRules = jamoStr;
-            jamoStr = applyPronunciationRules(jamoStr);
-            System.out.println("Before rules: " + toUnicodeString(beforeRules));  // Debug log
-            System.out.println("After rules: " + toUnicodeString(jamoStr));  // Debug log
+        String processedText = text;
+        Map<String, String> protections = new HashMap<>();
+        int[] counter = {0};
+
+        if (useDictionary) {
+            for (Map.Entry<String, String> entry : DictionaryData.DICTIONARY.entrySet()) {
+                String ko = entry.getKey();
+                String en = entry.getValue();
+                if (processedText.contains(ko)) {
+                    // We use a regex to ensure we only replace the specific Korean word
+                    // and not parts of placeholders. Since placeholders don't have Hangul, 
+                    // processedText.replace(ko, placeholder) is safe enough if sorted by length.
+                    String placeholder = "__KRM_" + (counter[0]++) + "__";
+                    String capitalized = en.substring(0, 1).toUpperCase() + en.substring(1);
+                    protections.put(placeholder, capitalized);
+                    processedText = processedText.replace(ko, placeholder);
+                }
+            }
         }
-        
-        String result = convertJamosToRoman(jamoStr);
-        return applyCasing(result, casingOption);
+
+        // Split by placeholders
+        String[] parts = processedText.split("(?<=__KRM_\\d+__)|(?=__KRM_\\d+__)");
+        StringBuilder resultBuilder = new StringBuilder();
+
+        for (String part : parts) {
+            if (part.startsWith("__KRM_") && part.endsWith("__")) {
+                resultBuilder.append(protections.getOrDefault(part, part));
+            } else {
+                String jamoStr = splitHangulToJamos(part);
+                if (usePronunciationRules) {
+                    jamoStr = applyPronunciationRules(jamoStr);
+                }
+                String romanizedPart = convertJamosToRoman(jamoStr);
+                resultBuilder.append(applyCasing(romanizedPart, casingOption));
+            }
+        }
+
+        String finalResult = resultBuilder.toString();
+        if (casingOption == CasingOption.UPPERCASE) {
+            return finalResult.toUpperCase();
+        }
+        return finalResult;
     }
 
     public static String splitHangulToJamos(String text) {

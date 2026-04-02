@@ -10,6 +10,8 @@
 // @version: 1.0.0
 // @dependencies: None
 // @usage: Import this from koroman.mjs or koroman.cjs to access the romanize() function.
+import { DICTIONARY } from './koroman.dictionary.js';
+
 // 자모 분해 및 조합 + 로마자 변환 (초성/중성/종성 실제 유니코드 문자 사용 버전)
 
 // 초성: 19자 (U+1100~U+1112)
@@ -227,11 +229,51 @@ const CHO = [
     return [...jamoStr].map(ch => map[ch] ?? ch).join('');
   }
   
-  function romanize(str, { usePronunciationRules = true, casingOption = "lowercase" } = {}) {
-    const { jamoString } = splitHangulToJamos(str);
-    const replaced = usePronunciationRules ? applyPronunciationRules(jamoString) : jamoString;
-    const romanized = applyRomanMapping(replaced);
-    return formatRoman(romanized, casingOption);
+  function romanize(str, { usePronunciationRules = true, casingOption = "lowercase", useDictionary = false } = {}) {
+    if (!str) return '';
+
+    let processedStr = str;
+    let protections = [];
+
+    if (useDictionary) {
+      // dictionary keys are already sorted by length descending in the data file
+      for (const [ko, en] of Object.entries(DICTIONARY)) {
+        if (processedStr.includes(ko)) {
+          // Careful: replace all occurrences but avoid partial matches within already protected strings
+          // Use a regex with escaping
+          const escapedKo = ko.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+          const regex = new RegExp(escapedKo, 'g');
+          processedStr = processedStr.replace(regex, (match) => {
+            const idx = protections.length;
+            const capitalized = en.charAt(0).toUpperCase() + en.slice(1);
+            protections.push(capitalized);
+            return `__KRM_${idx}__`;
+          });
+        }
+      }
+    }
+
+    // Split by placeholders
+    const parts = processedStr.split(/(__KRM_\d+__)/);
+    const romanizedParts = parts.map(part => {
+      const match = part.match(/__KRM_(\d+)__/);
+      if (match) {
+        return protections[parseInt(match[1])];
+      } else {
+        const { jamoString } = splitHangulToJamos(part);
+        const replaced = usePronunciationRules ? applyPronunciationRules(jamoString) : jamoString;
+        const romanized = applyRomanMapping(replaced);
+        return formatRoman(romanized, casingOption);
+      }
+    });
+
+    let finalResult = romanizedParts.join('');
+    
+    if (casingOption === "uppercase") {
+      finalResult = finalResult.toUpperCase();
+    }
+    
+    return finalResult;
   }
 
   export { romanize, splitHangulToJamos, composeJamos, formatRoman, applyPronunciationRules, applyRomanMapping }; 
