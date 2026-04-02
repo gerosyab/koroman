@@ -102,25 +102,25 @@ public class Koroman {
         put(Pattern.compile("\u11bd\u110b"), "\u110c");  // 35. 받침 탈락
         put(Pattern.compile("\u11be\u110b"), "\u110e");  // 36. 받침 탈락
         put(Pattern.compile("\u11c2\u110b"), "");  // 37. 받침 탈락
+    public static final Map<Pattern, String> ASPIRATION_RULES = new LinkedHashMap<Pattern, String>() {{
         put(Pattern.compile("\u11c2\u1100|\u11a8\u1112"), "\u110f");  // 38. 격음화
         put(Pattern.compile("\u11c2\u1103|\u11ae\u1112"), "\u1110");  // 39. 격음화
         put(Pattern.compile("\u11c2\u110c|\u11bd\u1112"), "\u110e");  // 40. 격음화
-        put(Pattern.compile("\u11c2\u1107"), "\u1107");  // 41. 격음화
         put(Pattern.compile("\u11b8\u1112"), "\u1111");  // 42. 격음화
-        put(Pattern.compile("\u11af\u1105"), "ll");  // 43. 특수 처리
-        put(Pattern.compile("\u11c2(?!\\s|$)"), "");  // 44. 특수 처리
     }};
 
     public static String applyPronunciationRules(String jamoStr) {
+        return applyPronunciationRules(jamoStr, true);
+    }
+
+    public static String applyPronunciationRules(String jamoStr, boolean preserveH) {
         String result = jamoStr;
-        System.out.println("Input: " + toUnicodeString(jamoStr));  // Debug log
         for (Map.Entry<Pattern, String> rule : PRONUNCIATION_RULES.entrySet()) {
-            String before = result;
             result = rule.getKey().matcher(result).replaceAll(rule.getValue());
-            if (!before.equals(result) && rule.getKey().pattern().contains("\\u11ae\\u110b\\u1175")) {
-                System.out.println("굳이 rule applied:");
-                System.out.println("Before: " + toUnicodeString(before));
-                System.out.println("After: " + toUnicodeString(result));
+        }
+        if (!preserveH) {
+            for (Map.Entry<Pattern, String> rule : ASPIRATION_RULES.entrySet()) {
+                result = rule.getKey().matcher(result).replaceAll(rule.getValue());
             }
         }
         return result;
@@ -139,26 +139,31 @@ public class Koroman {
     }
 
     public static String romanize(String text, boolean usePronunciationRules, CasingOption casingOption) {
-        return romanize(text, usePronunciationRules, casingOption, false);
+        return romanize(text, usePronunciationRules, casingOption, null, "2024-27");
     }
 
     public static String romanize(String text, boolean usePronunciationRules, CasingOption casingOption, boolean useDictionary) {
+        return romanize(text, usePronunciationRules, casingOption, useDictionary, "2024-27");
+    }
+
+    public static String romanize(String text, boolean usePronunciationRules, CasingOption casingOption, Boolean useDictionary, String version) {
         if (text == null || text.isEmpty()) {
             return text;
         }
+
+        boolean isLegacy = "2000-8".equals(version);
+        boolean actualUseDictionary = useDictionary != null ? useDictionary : !isLegacy;
+        boolean preserveH = !isLegacy;
 
         String processedText = text;
         Map<String, String> protections = new HashMap<>();
         int[] counter = {0};
 
-        if (useDictionary) {
+        if (actualUseDictionary) {
             for (Map.Entry<String, String> entry : DictionaryData.DICTIONARY.entrySet()) {
                 String ko = entry.getKey();
                 String en = entry.getValue();
                 if (processedText.contains(ko)) {
-                    // We use a regex to ensure we only replace the specific Korean word
-                    // and not parts of placeholders. Since placeholders don't have Hangul, 
-                    // processedText.replace(ko, placeholder) is safe enough if sorted by length.
                     String placeholder = "__KRM_" + (counter[0]++) + "__";
                     String capitalized = en.substring(0, 1).toUpperCase() + en.substring(1);
                     protections.put(placeholder, capitalized);
@@ -177,7 +182,7 @@ public class Koroman {
             } else {
                 String jamoStr = splitHangulToJamos(part);
                 if (usePronunciationRules) {
-                    jamoStr = applyPronunciationRules(jamoStr);
+                    jamoStr = applyPronunciationRules(jamoStr, preserveH);
                 }
                 String romanizedPart = convertJamosToRoman(jamoStr);
                 resultBuilder.append(applyCasing(romanizedPart, casingOption));
