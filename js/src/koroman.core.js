@@ -90,7 +90,7 @@ const CHO = [
     return result;
   }
   
-  function applyPronunciationRules(jamoStr) {
+  function applyPronunciationRules(jamoStr, { preserveH = true } = {}) {
     const replaceArr = [
 
         // ==============================
@@ -182,26 +182,26 @@ const CHO = [
         { p: /\u11bb\u110b/g, r: "ᄊ" }, // 'ᆻ' + 'ᄋ' → 'ᄊ'
         { p: /\u11bd\u110b/g, r: "ᄌ" }, // 'ᆽ' + 'ᄋ' → 'ᄌ'
         { p: /\u11be\u110b/g, r: "ᄎ" }, // 'ᆾ' + 'ᄋ' → 'ᄎ'
-        { p: /\u11c2\u110b/g, r: "" },  // 'ᇂ' + 'ᄋ' → 제거
-      
-        // ==============================
-        // 8. 격음화 (종성 + ㅎ/히읗)
-        // ==============================
-      
+        { p: /\u11c2\u110b/g, r: "" }   // 'ᇂ' + 'ᄋ' → 제거
+      ];
+
+    // [제2024-27호 예외 조항: 체언에서 ㅎ을 밝혀 적음]
+    if (!preserveH) {
+      replaceArr.push(
         { p: /\u11c2\u1100|\u11a8\u1112/g, r: "ᄏ" }, // 'ᇂ'+'ᄀ' 또는 'ᆨ'+'ᄒ' → 'ᄏ'
         { p: /\u11c2\u1103|\u11ae\u1112/g, r: "ᄐ" }, // 'ᇂ'+'ᄃ' 또는 'ᆮ'+'ᄒ' → 'ᄐ'
         { p: /\u11c2\u110c|\u11bd\u1112/g, r: "ᄎ" }, // 'ᇂ'+'ᄌ' 또는 'ᆽ'+'ᄒ' → 'ᄎ'
+        { p: /\u11b8\u1112/g, r: "ᄑ" }                // 'ᆸ'+'ᄒ' → 'ᄑ'
+      );
+    }
+
+    // 공통 격음화 및 특수 처리
+    replaceArr.push(
         { p: /\u11c2\u1107/g, r: "ᄇ" },               // 'ᇂ'+'ᄇ' → 'ᄇ'
-        { p: /\u11b8\u1112/g, r: "ᄑ" },               // 'ᆸ'+'ᄒ' → 'ᄑ'
-      
-        // ==============================
-        // 9. 특수 처리 및 최종 정리
-        // ==============================
-      
-        { p: /\u11af\u1105/g, r: "ll" }, // 'ᆯ' + 'ᄅ' → ll
-        { p: /\u11c2(?!\s|$)/g, r: "" }, // 'ᇂ' (종성) 단독 → 제거
+        { p: /\u11af\u1105/g, r: "ll" },               // 'ᆯ' + 'ᄅ' → ll
+        { p: /\u11c2(?!\s|$)/g, r: "" },               // 'ᇂ' (종성) 단독 → 제거
         { p: /([\u11a8-\u11c2])([\u11a8-\u11c2])/g, r: "$1" } // 이중 종성 제거
-      ];
+    );
       
     for (const { p, r } of replaceArr) {
       jamoStr = jamoStr.replace(p, r);
@@ -229,18 +229,22 @@ const CHO = [
     return [...jamoStr].map(ch => map[ch] ?? ch).join('');
   }
   
-  function romanize(str, { usePronunciationRules = true, casingOption = "lowercase", useDictionary = false } = {}) {
+  function romanize(str, { usePronunciationRules = true, casingOption = "lowercase", useDictionary = null, version = "2024-27" } = {}) {
     if (!str) return '';
+
+    // Version-based Defaults
+    const isLegacy = version === "2000-8";
+    const actualUseDictionary = useDictionary !== null ? useDictionary : !isLegacy;
+    const preserveH = !isLegacy;
 
     let processedStr = str;
     let protections = [];
 
-    if (useDictionary) {
+    if (actualUseDictionary) {
       // dictionary keys are already sorted by length descending in the data file
       for (const [ko, en] of Object.entries(DICTIONARY)) {
         if (processedStr.includes(ko)) {
           // Careful: replace all occurrences but avoid partial matches within already protected strings
-          // Use a regex with escaping
           const escapedKo = ko.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
           const regex = new RegExp(escapedKo, 'g');
           processedStr = processedStr.replace(regex, (match) => {
@@ -261,7 +265,7 @@ const CHO = [
         return protections[parseInt(match[1])];
       } else {
         const { jamoString } = splitHangulToJamos(part);
-        const replaced = usePronunciationRules ? applyPronunciationRules(jamoString) : jamoString;
+        const replaced = usePronunciationRules ? applyPronunciationRules(jamoString, { preserveH }) : jamoString;
         const romanized = applyRomanMapping(replaced);
         return formatRoman(romanized, casingOption);
       }

@@ -36,7 +36,7 @@ ROMAN_MAP = {
     "ᆽ": "t", "ᆾ": "t", "ᆿ": "k", "ᇀ": "t", "ᇁ": "p", "ᇂ": "h"
 }
 
-def apply_pronunciation_rules(jamo_str):
+def apply_pronunciation_rules(jamo_str, preserve_h=True):
     # ==============================
     # 1. 무효화 처리
     # ==============================
@@ -47,96 +47,81 @@ def apply_pronunciation_rules(jamo_str):
         # 2. 비음화 (ㄴ, ㅁ, ㅇ)
         # ==============================
         (r"[\u11b8\u11c1\u11b9\u11b2\u11b5](?=[\u1102\u1106])", "\u11b7"),
-        # 종성 'ᆸ(ㅂ)' 'ᇁ(ㅍ)' 'ᆹ(ㅂㅅ)' 'ᆲ(ㄹㅂ)' 'ᆵ(ㄹㅍ)' + 다음 초성 'ᄂ(ㄴ)' or 'ᄆ(ㅁ)' → 'ᆷ'
-        
         (r"[\u11ae\u11c0\u11bd\u11be\u11ba\u11bb\u11c2](?=[\u1102\u1106])", "\u11ab"),
-        # 종성 'ᆮ(ㄷ)' 'ᇀ(ㅌ)' 'ᆽ(ㅈ)' 'ᆾ(ㅊ)' 'ᆺ(ㅅ)' 'ᆻ(ㅆ)' 'ᇂ(ㅎ)' + 다음 초성 'ᄂ(ㄴ)' or 'ᄆ(ㅁ)' → 'ᆫ'
-        
         (r"[\u11a8\u11a9\u11bf\u11aa\u11b0](?=[\u1102\u1106])", "\u11bc"),
-        # 종성 'ᆨ(ㄱ)' 'ᆩ(ㄲ)' 'ᆿ(ㅋ)' 'ᆪ(ㄱㅅ)' 'ᆰ(ㄹㄱ)' + 다음 초성 'ᄂ'/'ᄆ' → 'ᆼ'
         
         # ==============================
         # 3. 연음/연철
         # ==============================
         (r"\u11a8\u110b(?=[\u1163\u1164\u1167\u1168\u116d\u1172])", "\u11bc\u1102"),
-        # 'ᆨ' + 'ᄋ' + 중성 'ㅑㅒㅕㅖㅛㅠ' → 'ᆼᄂ' (연음화)
-        
         (r"\u11af\u110b(?=[\u1163\u1164\u1167\u1168\u116d\u1172])", "\u11af\u1105"),
-        # 'ᆯ' + 'ᄋ' + 중성 위와 같음 → 'ᆯᄅ'
-        
         (r"[\u11a8\u11bc]\u1105", "\u11bc\u1102"),
-        # 'ᆨ(ㄱ)', 'ᆼ(ㅇ)' + 'ᄅ(ㄹ)' → 'ᆼᄂ'
-        
         (r"\u11ab\u1105(?=\u1169)", "\u11ab\u1102"),
-        # 'ᆫ(ㄴ)' + 'ᄅ' + 중성 'ㅗ' → 'ᆫᄂ'
-        
         (r"\u11af\u1102|\u11ab\u1105", "\u11af\u1105"),
-        # 'ᆯ(ㄹ)' + 'ᄂ(ㄴ)', 'ᆫ(ㄴ)' + 'ᄅ(ㄹ)' → 'ᆯᄅ'
-        
         (r"[\u11b7\u11b8]\u1105", "\u11b7\u1102"),
-        # 'ᆷ(ㅁ)', 'ᆸ(ㅂ)' + 'ᄅ' → 'ᆷᄂ'
-        
         (r"\u11b0\u1105", "\u11a8\u1105"),
-        # 'ᆰ(ㄹㄱ)' + 'ᄅ' → 'ᆨᄅ'
         
         # ==============================
         # 4. 격음화 / 자음군 분해
         # ==============================
-        (r"\u11a8\u110f", "\u11a8-\u110f"),  # 'ᆨ' + 'ᄏ' → 'ᆨ-ᄏ'
-        (r"\u11b8\u1111", "\u11b8-\u1111"),  # 'ᆸ' + 'ᄑ' → 'ᆸ-ᄑ'
-        (r"\u11ae\u1110", "\u11ae-\u1110"),  # 'ᆮ' + 'ᄐ' → 'ᆮ-ᄐ'
+        (r"\u11a8\u110f", "\u11a8-\u110f"),
+        (r"\u11b8\u1111", "\u11b8-\u1111"),
+        (r"\u11ae\u1110", "\u11ae-\u1110"),
         
         # ==============================
         # 5. 복합 종성 분해
         # ==============================
-        (r"\u11aa", "\u11a8\u11ba"),  # 'ᆪ(ㄱㅅ)' → 'ᆨᆺ'
-        (r"\u11ac", "\u11ab\u11bd"),  # 'ᆬ(ㄴㅈ)' → 'ᆫᆽ'
-        (r"\u11ad", "\u11ab\u11c2"),  # 'ᆭ(ㄴㅎ)' → 'ᆫᇂ'
-        (r"\u11b0", "\u11af\u11a8"),  # 'ᆰ(ㄹㄱ)' → 'ᆯᆨ'
-        (r"\u11b1", "\u11af\u11b7"),  # 'ᆱ(ㄹㅁ)' → 'ᆯᆷ'
-        (r"\u11b2", "\u11af\u11b8"),  # 'ᆲ(ㄹㅂ)' → 'ᆯᆸ'
-        (r"\u11b3", "\u11af\u11ba"),  # 'ᆳ(ㄹㅅ)' → 'ᆯᆺ'
-        (r"\u11b4", "\u11af\u11c0"),  # 'ᆴ(ㄹㅌ)' → 'ᆯᇀ'
-        (r"\u11b5", "\u11af\u11c1"),  # 'ᆵ(ㄹㅍ)' → 'ᆯᇁ'
-        (r"\u11b6", "\u11af\u11c2"),  # 'ᆶ(ㄹㅎ)' → 'ᆯᇂ'
-        (r"\u11b9", "\u11b8\u11ba"),  # 'ᆹ(ㅂㅅ)' → 'ᆸᆺ'
+        (r"\u11aa", "\u11a8\u11ba"),
+        (r"\u11ac", "\u11ab\u11bd"),
+        (r"\u11ad", "\u11ab\u11c2"),
+        (r"\u11b0", "\u11af\u11a8"),
+        (r"\u11b1", "\u11af\u11b7"),
+        (r"\u11b2", "\u11af\u11b8"),
+        (r"\u11b3", "\u11af\u11ba"),
+        (r"\u11b4", "\u11af\u11c0"),
+        (r"\u11b5", "\u11af\u11c1"),
+        (r"\u11b6", "\u11af\u11c2"),
+        (r"\u11b9", "\u11b8\u11ba"),
         
         # ==============================
         # 6. 경음화/축약 등 특수 규칙
         # ==============================
-        (r"\u11ae\u110b\u1175", "\u110c\u1175"),  # 'ᆮ' + 'ᄋ' + 'ᅵ' → '지'
-        (r"\u11c0\u110b\u1175", "\u110e\u1175"),  # 'ᇀ' + 'ᄋ' + 'ᅵ' → '치'
+        (r"\u11ae\u110b\u1175", "\u110c\u1175"),
+        (r"\u11c0\u110b\u1175", "\u110e\u1175"),
         
         # ==============================
         # 7. 받침 탈락 또는 이음자 제거
         # ==============================
-        (r"\u11a8\u110b", "\u1100"),  # 'ᆨ' + 'ᄋ' → 'ᄀ'
-        (r"\u11a9\u110b", "\u1101"),  # 'ᆩ' + 'ᄋ' → 'ᄁ'
-        (r"\u11ae\u110b", "\u1103"),  # 'ᆮ' + 'ᄋ' → 'ᄃ'
-        (r"\u11af\u110b", "\u1105"),  # 'ᆯ' + 'ᄋ' → 'ᄅ'
-        (r"\u11b8\u110b", "\u1107"),  # 'ᆸ' + 'ᄋ' → 'ᄇ'
-        (r"\u11ba\u110b", "\u1109"),  # 'ᆺ' + 'ᄋ' → 'ᄉ'
-        (r"\u11bb\u110b", "\u110a"),  # 'ᆻ' + 'ᄋ' → 'ᄊ'
-        (r"\u11bd\u110b", "\u110c"),  # 'ᆽ' + 'ᄋ' → 'ᄌ'
-        (r"\u11be\u110b", "\u110e"),  # 'ᆾ' + 'ᄋ' → 'ᄎ'
-        (r"\u11c2\u110b", ""),        # 'ᇂ' + 'ᄋ' → 제거
-        
-        # ==============================
-        # 8. 격음화 (종성 + ㅎ/히읗)
-        # ==============================
-        (r"\u11c2\u1100|\u11a8\u1112", "\u110f"),  # 'ᇂ'+'ᄀ' 또는 'ᆨ'+'ᄒ' → 'ᄏ'
-        (r"\u11c2\u1103|\u11ae\u1112", "\u1110"),  # 'ᇂ'+'ᄃ' 또는 'ᆮ'+'ᄒ' → 'ᄐ'
-        (r"\u11c2\u110c|\u11bd\u1112", "\u110e"),  # 'ᇂ'+'ᄌ' 또는 'ᆽ'+'ᄒ' → 'ᄎ'
-        (r"\u11c2\u1107", "\u1107"),               # 'ᇂ'+'ᄇ' → 'ᄇ'
-        (r"\u11b8\u1112", "\u1111"),               # 'ᆸ'+'ᄒ' → 'ᄑ'
-        
-        # ==============================
-        # 9. 특수 처리 및 최종 정리
-        # ==============================
-        (r"\u11af\u1105", "ll"),                   # 'ᆯ' + 'ᄅ' → ll
-        (r"\u11c2(?!\s|$)", ""),                  # 'ᇂ' (종성) 단독 → 제거
-        (r"([\u11a8-\u11c2])([\u11a8-\u11c2])", r"\1")  # 이중 종성 제거
+        (r"\u11a8\u110b", "\u1100"),
+        (r"\u11a9\u110b", "\u1101"),
+        (r"\u11ae\u110b", "\u1103"),
+        (r"\u11af\u110b", "\u1105"),
+        (r"\u11b8\u110b", "\u1107"),
+        (r"\u11ba\u110b", "\u1109"),
+        (r"\u11bb\u110b", "\u110a"),
+        (r"\u11bd\u110b", "\u110c"),
+        (r"\u11be\u110b", "\u110e"),
+        (r"\u11c2\u110b", ""),
     ]
+
+    # 격음화 (종성 + ㅎ/히읗) - 2024-27호에서는 체언에서 ㅎ을 밝혀 적음
+    if not preserve_h:
+        rules.extend([
+            (r"\u11c2\u1100|\u11a8\u1112", "\u110f"),
+            (r"\u11c2\u1103|\u11ae\u1112", "\u1110"),
+            (r"\u11c2\u110c|\u11bd\u1112", "\u110e"),
+            (r"\u11b8\u1112", "\u1111"),
+        ])
+    
+    # 공통 격음화 (ㅎ+ㅂ은 항상 ㅂ)
+    rules.append((r"\u11c2\u1107", "\u1107"))
+
+    # 최종 정리
+    rules.extend([
+        (r"\u11af\u1105", "ll"),
+        (r"\u11c2(?!\s|$)", ""),
+        (r"([\u11a8-\u11c2])([\u11a8-\u11c2])", r"\1")
+    ])
 
     for pattern, repl in rules:
         jamo_str = re.sub(pattern, repl, jamo_str)
@@ -197,14 +182,19 @@ def romanize(text, **options):
         **options: Optional parameters:
             - use_pronunciation_rules (bool): Whether to apply pronunciation rules (default: True)
             - casing_option (str): Casing option (default: "lowercase")
-            - use_dictionary (bool): Whether to use place name dictionary (default: False)
+            - use_dictionary (bool): Whether to use place name dictionary (default: Depends on version)
+            - version (str): Version of the rules (default: "2024-27")
     
     Returns:
         str: Romanized text
     """
+    version = options.get('version', "2024-27")
+    is_legacy = version == "2000-8"
+    
     use_pronunciation_rules = options.get('use_pronunciation_rules', True)
     casing_option = options.get('casing_option', "lowercase")
-    use_dictionary = options.get('use_dictionary', False)
+    use_dictionary = options.get('use_dictionary', not is_legacy)
+    preserve_h = not is_legacy
     
     if not text:
         return ""
@@ -239,7 +229,7 @@ def romanize(text, **options):
         else:
             jamo_str = split_hangul_to_jamos(part)
             if use_pronunciation_rules:
-                jamo_str = apply_pronunciation_rules(jamo_str)
+                jamo_str = apply_pronunciation_rules(jamo_str, preserve_h=preserve_h)
             romanized_part = "".join(ROMAN_MAP.get(c, c) for c in jamo_str)
             
             # Apply casing to non-dictionary part

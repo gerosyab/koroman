@@ -66,6 +66,7 @@
             font-weight: 800;
             background: linear-gradient(to right, #818cf8, #c084fc);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.75rem;
             letter-spacing: -0.02em;
@@ -276,17 +277,21 @@
     <div class="container" id="app">
         <header>
             <h1>KOROMAN</h1>
-            <p class="subtitle">국어의 로마자 표기법 [문화관광부 고시 제2000-8호]에 기반</p>
+            <p class="subtitle" id="versionSubtitle">국어의 로마자 표기법 [문화체육관광부고시 제2024-27호]에 기반</p>
         </header>
 
-        <!-- Samples moved here -->
+        <!-- Samples re-configured: 5 Proper Nouns, 5 Common Nouns -->
         <div class="samples">
-            <span class="sample-tag">해돋이</span>
-            <span class="sample-tag">문래역</span>
-            <span class="sample-tag">선릉역</span>
-            <span class="sample-tag">역량 개발</span>
-            <span class="sample-tag">안녕하십니까?</span>
-            <span class="sample-tag">로마자 표기법</span>
+            <span class="sample-tag" title="고유명사: 시/도 생략 사전 매칭">서울특별시</span>
+            <span class="sample-tag" title="고유명사: 행정구역 하이픈">종로구</span>
+            <span class="sample-tag" title="고유명사: ㅎ 밝혀 적기 예외">묵호</span>
+            <span class="sample-tag" title="고유명사: 음절 혼동방지 하이픈">해운대</span>
+            <span class="sample-tag" title="고유명사: 인명 표기">민용하</span>
+            <span class="sample-tag" title="일반단어: 구개음화">해돋이</span>
+            <span class="sample-tag" title="일반단어: 비음화">백마</span>
+            <span class="sample-tag" title="일반단어: ㄴ 첨가">알약</span>
+            <span class="sample-tag" title="일반단어: 격음화 축약">좋고</span>
+            <span class="sample-tag" title="일반단어: 구개음화">같이</span>
         </div>
 
         <div class="main-layout">
@@ -299,12 +304,19 @@
 
                 <div class="options-grid">
                     <div class="option-item">
-                        <label for="usePronunciation" style="margin: 0; cursor: pointer; text-transform: none;">발음 규칙 적용</label>
-                        <input type="checkbox" id="usePronunciation" checked>
+                        <label for="version" style="margin: 0; text-transform: none;">기준 고시 버전</label>
+                        <select id="version" style="min-width: 220px;">
+                            <option value="2024-27" selected>2024-27호 (최신 표준)</option>
+                            <option value="2000-8">2000-8호 (레거시/축약)</option>
+                        </select>
                     </div>
                     <div class="option-item">
                         <label for="useDictionary" style="margin: 0; cursor: pointer; text-transform: none;">지명 사전(고유명사) 자동 인식</label>
                         <input type="checkbox" id="useDictionary" checked>
+                    </div>
+                    <div class="option-item">
+                        <label for="usePronunciation" style="margin: 0; cursor: pointer; text-transform: none;">발음 규칙 적용</label>
+                        <input type="checkbox" id="usePronunciation" checked>
                     </div>
                     <div class="option-item">
                         <label for="casing" style="margin: 0; text-transform: none;">대소문자 옵션</label>
@@ -339,6 +351,8 @@
     <script>
         const inputEl = document.getElementById('input');
         const outputEl = document.getElementById('output');
+        const versionEl = document.getElementById('version');
+        const versionSubtitle = document.getElementById('versionSubtitle');
         const usePronunciationEl = document.getElementById('usePronunciation');
         const useDictionaryEl = document.getElementById('useDictionary');
         const casingEl = document.getElementById('casing');
@@ -346,6 +360,15 @@
 
         function update() {
             const text = inputEl.value;
+            const version = versionEl.value;
+            
+            // Update Subtitle
+            if (version === '2024-27') {
+                versionSubtitle.textContent = '국어의 로마자 표기법 [문화체육관광부고시 제2024-27호]에 기반';
+            } else {
+                versionSubtitle.textContent = '국어의 로마자 표기법 [문화관광부 고시 제2000-8호]에 기반';
+            }
+
             if (!text) {
                 outputEl.textContent = '이곳에 결과가 표시됩니다...';
                 outputEl.style.opacity = '0.5';
@@ -355,6 +378,7 @@
             outputEl.style.opacity = '1';
             try {
                 const options = {
+                    version: version,
                     usePronunciationRules: usePronunciationEl.checked,
                     useDictionary: useDictionaryEl.checked,
                 };
@@ -373,6 +397,7 @@
         }
 
         inputEl.addEventListener('input', update);
+        versionEl.addEventListener('change', update);
         usePronunciationEl.addEventListener('change', update);
         useDictionaryEl.addEventListener('change', update);
         casingEl.addEventListener('change', update);
