@@ -1,117 +1,51 @@
 > 🇰🇷 [한국어로 보기](./README.ko.md)
 
-# KOROMAN - Korean Romanizer
+# KOROMAN - Standard Korean Romanizer
 
-**KOROMAN** is a multilingual Romanizer for Korean text, based on the Revised Romanization system (국립국어원 표기법) with additional pronunciation rules. It converts Hangul syllables into Romanized Latin script across multiple languages: **JavaScript, Python, and Java**.
+**KOROMAN** is a multilingual Romanizer for Korean text, strictly following the **Latest Revised Romanization system ([Notice 2024-27](docs/국어의_로마자_표기법(문화체육관광부고시_제2024-27호).md))** and the legacy standard (Notice 2000-8). It supports **JavaScript, Python, and Java** with a unified core engine.
 
-## 🌐 Live Demo
-- [한국어 버전](https://daissue.app/romanizer)
-- [English version](https://daissue.app/en/romanizer)
+## 🌟 What's New (v1.1.0)
+- **Notice 2024-27 Compliance**: Correctly preserves 'h' (ㅎ) in nouns as per the latest government exception rule (e.g., `Mukho`, `Jiphyeonjeon`).
+- **Smart Mode**: Integrated dictionary with ~790 major administrative districts and landmarks for standardized spelling and automatic capitalization (e.g., `Seoul`, `Jongno-gu`).
+- **Version Branching**: Easily toggle between legacy (2000-8) and modern (2024-27) rules.
 
----
-
-## 📦 Features
-- Supports Revised Romanization of Korean
-- Applies key Korean phonological rules:
-  - Liaison (연음화)
-  - Nasal assimilation (비음화)
-  - Lateralization (유음화)
-  - Fortis/tense consonants (경음화)
-- Provides casing options (lower, upper, capitalized)
-- Cross-platform support (Node.js, Python, Java)
-- Fully tested in each language
+## 🌐 Live Demo (v1.1.0)
+- [KOROMAN Real-time Demo & Version Comparison](https://daissue.app/romanizer)
 
 ---
 
-## 📁 Project Structure
-```
-koroman/
-├── java/                      # Java implementation
-│   ├── src/
-│   │   ├── main/
-│   │   │   └── java/
-│   │   │       └── app/
-│   │   │           └── daissue/
-│   │   │               └── koroman/
-│   │   │                   └── Koroman.java
-│   │   └── test/
-│   │       └── java/
-│   │           └── app/
-│   │               └── daissue/
-│   │                   └── koroman/
-│   │                       └── KoromanTest.java
-│   └── build.gradle
-│
-├── js/                        # JavaScript implementation
-│   ├── dist                   
-│   │   └── koroman.browser.js  # Distribution for browsers
-│   ├── src    
-│   │   ├── koroman.cjs        # CommonJS support
-│   │   ├── koroman.core.js    # Core implementation
-│   │   ├── koroman.d.ts       # Typescript support
-│   │   └── koroman.mjs        # ESM supoort
-│   └── tests/
-│       └── test_koroman.js
-│
-└── python/                    # Python implementation
-    ├── koroman/              
-    │   ├── __init__.py       
-    │   └── core.py           
-    ├── test/                          
-    │   └── test_koroman.py
-    └── setup.py
-```
+## 📦 Key Features
+- **Official Standards**: Supports both the latest (2024-27) and legacy (2000-8) notices.
+- **Smart Proper Noun Recognition (useDictionary)**:
+  - Bypasses standard pronunciation rules for matched dictionary entries.
+  - Automatic capitalization for place names and landmarks.
+- **Precise Phonological Rules**:
+  - Liaison, Nasalization, Lateralization, and Palatalization support.
+  - **Aspiration Exceptions**: Preserves 'h' in nouns to comply with the 2024-27 standard.
+- **Modern Centered UI**:
+  - A clean, premium responsive demo with a centered layout and high-readability typography.
+  - Mobile-ready with real-time version comparison.
+- **Multilingual Core**: 100% identical logic across JS (ESM/CJS), Python, and Java.
 
 ---
 
 ## 🚀 Getting Started
 
-### JavaScript (jsDeliver)
-```html
-<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.12/js/dist/koroman.browser.js"></script>
-<script>
-  const result = koroman.romanize("안녕하세요");
-  console.log(result); // → annyeonghaseyo
-</script>
-```
-### JavaScript (Node.js)
-```bash
-npm install koroman
-```
-#### CommonJS
-```js
-const koroman = require('koroman');
-
-// Basic usage
-koroman.romanize("한글"); // → "hangul"
-
-// With pronunciation rules disabled
-koroman.romanize("해돋이", { usePronunciationRules: false }); // → "haedodi"
-
-// With pronunciation rules enabled (default)
-koroman.romanize("해돋이"); // → "haedoji"
-
-// With different casing options
-koroman.romanize("한글", { casingOption: "uppercase" }); // → "HANGUL"
-koroman.romanize("안녕 한글", { casingOption: "capitalize-word" }); // → "Annyeong hangeul"
-koroman.romanize("안녕\n한글 로마자 변환", { casingOption: "capitalize-line" }); // → "Annyeong\nHangeul Romaja Byeonhwan"
-```
-#### ESM (requires "type": "module" in package.json)
-```js
+### JavaScript (Browser/Node.js)
+```javascript
 import { romanize } from 'koroman';
 
-romanize("한글"); // → "hangul"
+// 1. Smart Romanization (Notice 2024-27, default)
+romanize("서울특별시 종로구"); // → "Seoul Jongno-gu"
+romanize("묵호");            // → "Mukho" (h preserved)
 
-```
-#### Typescript
-```ts
-import { romanize } from 'koroman';
+// 2. Legacy Romanization (Notice 2000-8, merged aspiration)
+romanize("묵호", { version: "2000-8" }); // → "muko"
 
-const result: string = romanize("로마자", {
-  usePronunciationRules: true,
-  casingOption: "capitalize-line"
-}); // → "Romaja"
+// 3. Pronunciation & Casing Options
+romanize("해돋이", { casingOption: "capitalize-word" }); // → "Haedoji"
 ```
+
 ### Python
 ```bash
 pip install koroman
@@ -119,82 +53,33 @@ pip install koroman
 ```python
 from koroman import romanize
 
-# Basic usage
-romanize("한글")  # → "hangul"
+# Modern Smart Mode
+print(romanize("서울특별시")) # → Seoul
 
-# With pronunciation rules disabled
-romanize("해돋이", use_pronunciation_rules=False)  # → "haedodi"
-
-# With pronunciation rules enabled (default)
-romanize("해돋이")  # → "haedoji"
-
-# With different casing options
-romanize("한글", casing_option="uppercase")  # → "HANGUL"
-romanize("안녕 한글", casing_option="capitalize-word")  # → "Annyeong Hangeul"
-romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # → "Annyeong\nHangeul Romaja Byeonhwan"
-
-# Combining options
-romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase")  # → "HAEDODI"
+# Legacy Mode
+print(romanize("묵호", version="2000-8")) # → muko
 ```
 
-### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.12)
-```gradle
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-    implementation 'com.github.gerosyab:koroman:java-v1.0.12'
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-```
+### Java
 ```java
 import app.daissue.koroman.Koroman;
-import java.util.HashMap;
-import java.util.Map;
 
-// Basic usage (default: with pronunciation rules, lowercase)
-String result = Koroman.romanize("한글"); // → "hangul"
+// Modern Smart Mode (Default)
+String result = Koroman.romanize("집현전"); // → Jiphyeonjeon
 
-// With pronunciation rules disabled
-Map<String, Object> options = new HashMap<>();
-options.put("usePronunciationRules", false);
-String result = Koroman.romanize("해돋이", options); // → "haedodi"
-
-// With pronunciation rules enabled (default)
-String result = Koroman.romanize("해돋이"); // → "haedoji"
-
-// With different casing options
-options = new HashMap<>();
-options.put("casingOption", "uppercase");
-String result = Koroman.romanize("한글", options); // → "HANGUL"
-
-options.put("casingOption", "capitalize-word");
-String result = Koroman.romanize("안녕 한글", options); // → "Annyeong Hangeul"
-
-options.put("casingOption", "capitalize-line");
-String result = Koroman.romanize("안녕\n한글 로마자 변환", options); // → "Annyeong\nHangeul Romaja Byeonhwan"
-
-// Combining options
-options = new HashMap<>();
-options.put("usePronunciationRules", false);
-options.put("casingOption", "uppercase");
-String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
+// Legacy Mode (useDictionary=false, version="2000-8")
+String legacy = Koroman.romanize("묵호", true, Koroman.CasingOption.LOWERCASE, false, "2000-8"); // → muko
 ```
+
 ---
 
 ## 📦 Version Mapping
 
-| Feature / Change                 | JS (npm)  | Python (PyPI)  | Java (JitPack) | Description                                 |
-|----------------------------------|-----------|----------------|----------------|---------------------------------------------|
-| Initial stable release           | 1.0.12    | 1.0.0          | 1.0.12          | Basic romanization based on 국립국어원 표기법  |
+| Feature / Upgrade                | JS (npm)  | Python (PyPI)  | Java (JitPack) | Description                                 |
+|---------------------------------|-----------|----------------|----------------|---------------------------------------------|
+| Smart Mode & Notice 2024-27     | 1.1.0     | 1.1.0          | 1.1.0          | Notice 2024-27 support & Place Dictionary   |
+| Initial stable release          | 1.0.12    | 1.0.0          | 1.0.12         | Initial Romanizer based on 2000-8 standard  |
 
-> ℹ️ Each version is managed independently per language.  
-> Major feature additions aim to stay consistent across platforms, but release timing may vary.
 ---
 
 ## 📜 LICENSE
