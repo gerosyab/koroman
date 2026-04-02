@@ -301,7 +301,7 @@
     <div class="container" id="app">
         <header>
             <h1>KOROMAN</h1>
-            <p class="subtitle" id="versionSubtitle">국어의 로마자 표기법 [문화체육관광부고시 제2024-27호]에 기반</p>
+            <p class="subtitle" id="versionSubtitle">국어의 로마자 표기법 <a href="docs/notice_2024_27.md" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: 600;">[문화체육관광부고시 제2024-27호]</a>에 기반</p>
         </header>
 
         <!-- Samples re-configured: 5 Proper Nouns, 5 Common Nouns -->
@@ -386,11 +386,14 @@
             const text = inputEl.value;
             const version = versionEl.value;
             
-            // Update Subtitle
+            // Build Version Subtitle with Direct Relative MD Link
+            const filename = "notice_2024_27.md";
+            const fullDocPath = `docs/${filename}`;
+            
             if (version === '2024-27') {
-                versionSubtitle.textContent = '국어의 로마자 표기법 [문화체육관광부고시 제2024-27호]에 기반';
+                versionSubtitle.innerHTML = `국어의 로마자 표기법 <a href="${fullDocPath}" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: 600;">[문화체육관광부고시 제2024-27호]</a>에 기반`;
             } else {
-                versionSubtitle.textContent = '국어의 로마자 표기법 [문화관광부 고시 제2000-8호]에 기반';
+                versionSubtitle.innerHTML = '국어의 로마자 표기법 <span style="font-weight: 600;">[문화관광부 고시 제2000-8호]</span>에 기반';
             }
 
             if (!text) {
@@ -449,6 +452,9 @@
                 });
             }
         });
+
+        // Initial update to set correct links and default state
+        update();
     </script>
 </body>
 </html>
