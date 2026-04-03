@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Common
 .DS_Store
 Thumbs.db
@@ -17,7 +16,6 @@ yarn-error.log*
 .pnpm-debug.log*
 .npm
 test-npm-package/
-=======
 # Logs
 logs
 *.log
@@ -149,12 +147,10 @@ dist
 .vscode-test
 
 # yarn v2
->>>>>>> e445a59a5355323b58d505f24b64647cccf83852
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
-<<<<<<< HEAD
 
 # Python
 __pycache__/
@@ -223,10 +219,11 @@ bin/
 *.iws
 .vscode/
 *.code-workspace 
-=======
 .pnp.*
 
 # EXCEPT
 !js/dist
 !js/dist/*
->>>>>>> e445a59a5355323b58d505f24b64647cccf83852
+
+# Docs
+CHANGELOG.md
