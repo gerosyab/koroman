@@ -20,7 +20,8 @@
     "src/koroman.core.js"
   ],
   "scripts": {
-    "test": "node test/js/test_koroman.js"
+    "test": "node tests/test_koroman.js",
+    "build": "rollup -c"
   },
   "author": {
     "name": "Donghe Youn",

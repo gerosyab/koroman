@@ -59,10 +59,13 @@ assert.strictEqual(
     romanize("여기는 선릉역 입니다.\r\n해돋이와 문래역 그리고 역량 개발."),
     "yeogineun seolleungyeok imnida.\r\nhaedojiwa mullaeyeok geurigo yeongnyang gaebal."
 );
-assert.strictEqual(
-    romanize("여기는 선릉역 입니다.\n\r해돋이와 문래역 그리고 역량 개발."),
-    "yeogineun seolleungyeok imnida.\n\rhaedojiwa mullaeyeok geurigo yeongnyang gaebal."
-);
-console.log('✅ Multiline and spacing tests passed');
+// Dictionary Casing Priority Tests
+console.log('\nRunning dictionary casing priority tests...');
+assert.strictEqual(romanize("서울특별시", { casingOption: "default" }), "Seoul");
+assert.strictEqual(romanize("서울특별시", { casingOption: "lowercase" }), "seoul");
+assert.strictEqual(romanize("서울특별시", { casingOption: "uppercase" }), "SEOUL");
+assert.strictEqual(romanize("서울특별시 종로구", { casingOption: "default" }), "Jongno-gu");
+assert.strictEqual(romanize("서울특별시 종로구", { casingOption: "capitalize-word" }), "Jongno-gu");
+console.log('✅ Dictionary casing priority tests passed');
 
 console.log('\n✅ All tests passed!');

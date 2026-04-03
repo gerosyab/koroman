@@ -1,0 +1,11 @@
+{
+  "name": "koroman-root",
+  "private": true,
+  "scripts": {
+    "build:js": "npm --prefix js run build && cp js/dist/koroman.browser.js demo/js/koroman.browser.js",
+    "build": "npm run build:js",
+    "dev": "npm run build && npx serve demo",
+    "test": "npm --prefix js test"
+  },
+  "description": "Standard Korean Romanizer (Root Project Manager)"
+}
