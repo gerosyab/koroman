@@ -29,6 +29,24 @@
 
 ---
 
+## 🚀 Local Development & Demo
+
+You can run the demo locally or build the library using the following commands from the project root:
+
+### 1. Run Demo (Development)
+```bash
+npm run dev
+```
+*   Builds the library with the latest source and starts a local web server at `http://localhost:3000`.
+
+### 2. Build Library (Build)
+```bash
+npm run build
+```
+*   Compiles `js/src` into `koroman.browser.js` and copies it to `dist/` and `demo/js/`.
+
+---
+
 ## 🚀 Getting Started
 
 ### JavaScript (Browser/Node.js)

@@ -39,6 +39,24 @@ koroman/
 
 ---
 
+## 🚀 로컬 개발 및 데모 실행 (Local Development)
+
+프로젝트 루트 디렉토리에서 다음 명령어를 사용하여 데모 페이지를 실행하거나 라이브러리를 빌드할 수 있습니다.
+
+### 1. 데모 페이지 실행 (Development)
+```bash
+npm run dev
+```
+*   라이브러리를 최신 소스로 빌드하고, 로컬 웹 서버(`http://localhost:3000`)를 통해 데모 페이지를 실행합니다.
+
+### 2. 라이브러리 빌드 (Build)
+```bash
+npm run build
+```
+*   `js/src`의 소스 코드를 `koroman.browser.js`로 빌드하여 `dist/` 및 `demo/js/` 폴더로 복사합니다.
+
+---
+
 ## 🚀 시작하기
 
 ### JavaScript (Browser/Node.js)
