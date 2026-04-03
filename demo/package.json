@@ -1,0 +1,10 @@
+{
+  "name": "koroman-demo",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix .. run build",
+    "dev": "npm --prefix .. run dev",
+    "start": "npm run dev"
+  },
+  "description": "KOROMAN Real-time Demo"
+}

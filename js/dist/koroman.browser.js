@@ -832,12 +832,13 @@ var koroman = (function (exports) {
     const ZWSP = '\u200A'; // Hair Space (조합 방지용)
   //   const ZWSP = '\u200B'; // zero-width space (조합 방지용)
     
-    function formatRoman(str, casingOption = "lowercase") {
+    function formatRoman(str, casingOption = "default") {
       switch (casingOption) {
+        case "lowercase": return str.toLowerCase();
         case "uppercase": return str.toUpperCase();
         case "capitalize-line": return str.split('\n').map(line => line.length > 0 ? line.charAt(0).toUpperCase() + line.slice(1) : '').join('\n');
         case "capitalize-word": return str.split('\n').map(line => line.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')).join('\n');
-        default: return str.toLowerCase();
+        default: return str;
       }
     }
     
@@ -1025,7 +1026,7 @@ var koroman = (function (exports) {
       return [...jamoStr].map(ch => map[ch] ?? ch).join('');
     }
     
-    function romanize(str, { usePronunciationRules = true, casingOption = "lowercase", useDictionary = null, version = "2024-27" } = {}) {
+    function romanize(str, { usePronunciationRules = true, casingOption = "default", useDictionary = null, version = "2024-27" } = {}) {
       if (!str) return '';
 
       // Version-based Defaults
@@ -1037,16 +1038,18 @@ var koroman = (function (exports) {
       let protections = [];
 
       if (actualUseDictionary) {
-        // dictionary keys are already sorted by length descending in the data file
-        for (const [ko, en] of Object.entries(DICTIONARY)) {
+        // Sort keys by length descending to ensure longest match wins
+        const sortedKeys = Object.keys(DICTIONARY).sort((a, b) => b.length - a.length);
+        
+        for (const ko of sortedKeys) {
+          const en = DICTIONARY[ko];
           if (processedStr.includes(ko)) {
             // Careful: replace all occurrences but avoid partial matches within already protected strings
             const escapedKo = ko.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
             const regex = new RegExp(escapedKo, 'g');
             processedStr = processedStr.replace(regex, (match) => {
               const idx = protections.length;
-              const capitalized = en.charAt(0).toUpperCase() + en.slice(1);
-              protections.push(capitalized);
+              protections.push(en); // Store original dictionary casing
               return `__KRM_${idx}__`;
             });
           }
@@ -1063,15 +1066,11 @@ var koroman = (function (exports) {
           const { jamoString } = splitHangulToJamos(part);
           const replaced = usePronunciationRules ? applyPronunciationRules(jamoString, { preserveH }) : jamoString;
           const romanized = applyRomanMapping(replaced);
-          return formatRoman(romanized, casingOption);
+          return romanized;
         }
       });
 
-      let finalResult = romanizedParts.join('');
-      
-      if (casingOption === "uppercase") {
-        finalResult = finalResult.toUpperCase();
-      }
+      const finalResult = formatRoman(romanizedParts.join(''), casingOption);
       
       return finalResult;
     }
