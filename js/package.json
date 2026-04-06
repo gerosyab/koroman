@@ -1,6 +1,6 @@
 {
   "name": "koroman",
-  "version": "1.0.11",
+  "version": "1.0.13",
   "description": "KOROMAN: Korean Romanizer with pronunciation rules based on 국립국어원 표기법",
   "main": "src/koroman.cjs",
   "module": "src/koroman.mjs",
@@ -20,7 +20,8 @@
     "src/koroman.core.js"
   ],
   "scripts": {
-    "test": "node test/js/test_koroman.js"
+    "test": "node tests/test_koroman.js",
+    "build": "rollup -c rollup.config.js"
   },
   "author": {
     "name": "Donghe Youn",

@@ -27,6 +27,10 @@ public class KoromanTest {
         System.out.println("With pronunciation rules (default):");
         testAndPrint("굳이", "guji", true);
         testAndPrint("해돋이", "haedoji", true);
+        testAndPrint("묵호", "mukho", true);
+        testAndPrint("집현전", "jiphyeonjeon", true);
+        testAndPrint("낙성대", "nakseongdae", true);
+        testAndPrint("팔당", "paldang", true);
 
         System.out.println("\nWithout pronunciation rules:");
         testAndPrint("굳이", "gudi", false);

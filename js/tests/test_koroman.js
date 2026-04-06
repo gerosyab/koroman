@@ -47,6 +47,10 @@ assert.strictEqual(romanize("선릉역"), "seolleungyeok");
 assert.strictEqual(romanize("선릉역", { usePronunciationRules: false }), "seonreungyeok");
 assert.strictEqual(romanize("역량"), "yeongnyang");
 assert.strictEqual(romanize("역량", { usePronunciationRules: true }), "yeongnyang");
+assert.strictEqual(romanize("묵호"), "mukho");
+assert.strictEqual(romanize("집현전"), "jiphyeonjeon");
+assert.strictEqual(romanize("낙성대"), "nakseongdae");
+assert.strictEqual(romanize("팔당"), "paldang");
 console.log('✅ Pronunciation rules tests passed');
 
 // Multiline and Spacing Tests

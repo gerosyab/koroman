@@ -23,6 +23,10 @@ class TestKoroman(unittest.TestCase):
         self.assertEqual(romanize("선릉역", use_pronunciation_rules=False), "seonreungyeok")
         self.assertEqual(romanize("역량"), "yeongnyang")
         self.assertEqual(romanize("역량", use_pronunciation_rules=True), "yeongnyang")
+        self.assertEqual(romanize("묵호"), "mukho")
+        self.assertEqual(romanize("집현전"), "jiphyeonjeon")
+        self.assertEqual(romanize("낙성대"), "nakseongdae")
+        self.assertEqual(romanize("팔당"), "paldang")
 
     def test_multiline_and_spacing(self):
         self.assertEqual(

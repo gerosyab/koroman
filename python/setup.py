@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name='koroman',
-    version='1.0.0',
+    version='1.0.13',
     description='Korean Romanizer with pronunciation rules based on 국립국어원 표기법',
     author='Donghe Youn (Daissue)',
     author_email='gerosyab@gmail.com',

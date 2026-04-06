@@ -10,7 +10,7 @@ var koroman = (function (exports) {
   //               apply Korean pronunciation rules, and convert them into Latin (Romanized) script.
   //               This module is used by both CommonJS and ESModule entry points and is not intended to be used directly.
   // @license: MIT License
-  // @version: 1.0.0
+  // @version: 1.0.13
   // @dependencies: None
   // @usage: Import this from koroman.mjs or koroman.cjs to access the romanize() function.
   // 자모 분해 및 조합 + 로마자 변환 (초성/중성/종성 실제 유니코드 문자 사용 버전)
@@ -186,14 +186,16 @@ var koroman = (function (exports) {
           { p: /\u11c2\u110b/g, r: "" },  // 'ᇂ' + 'ᄋ' → 제거
         
           // ==============================
-          // 8. 격음화 (종성 + ㅎ/히읗)
+          // 8. 격음화 (종성 ㅎ + 초성 / 받침 + 초성 ㅎ)
           // ==============================
         
-          { p: /\u11c2\u1100|\u11a8\u1112/g, r: "ᄏ" }, // 'ᇂ'+'ᄀ' 또는 'ᆨ'+'ᄒ' → 'ᄏ'
-          { p: /\u11c2\u1103|\u11ae\u1112/g, r: "ᄐ" }, // 'ᇂ'+'ᄃ' 또는 'ᆮ'+'ᄒ' → 'ᄐ'
+          { p: /\u11c2\u1100/g, r: "ᄏ" },   // 'ᇂ'+'ᄀ' 
+          { p: /\u11a8\u1112/g, r: "ᄏᄒ" }, // 'ᆨ'+'ᄒ' → 'ᄏᄒ'
+          { p: /\u11c2\u1103/g, r: "ᄐ" },   // 'ᇂ'+'ᄃ' → 'ᄐ'
+          { p: /\u11ae\u1112/g, r: "ᄐᄒ" }, // 'ᆮ'+'ᄒ' → 'ᄐᄒ'
           { p: /\u11c2\u110c|\u11bd\u1112/g, r: "ᄎ" }, // 'ᇂ'+'ᄌ' 또는 'ᆽ'+'ᄒ' → 'ᄎ'
-          { p: /\u11c2\u1107/g, r: "ᄇ" },               // 'ᇂ'+'ᄇ' → 'ᄇ'
-          { p: /\u11b8\u1112/g, r: "ᄑ" },               // 'ᆸ'+'ᄒ' → 'ᄑ'
+          { p: /\u11c2\u1107/g, r: "ᄇ" },   // 'ᇂ'+'ᄇ' → 'ᄇ'
+          { p: /\u11b8\u1112/g, r: "ᄑᄒ" }, // 'ᆸ'+'ᄒ' → 'ᄑᄒ'
         
           // ==============================
           // 9. 특수 처리 및 최종 정리

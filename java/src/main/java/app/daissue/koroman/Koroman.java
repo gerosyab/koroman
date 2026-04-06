@@ -102,13 +102,15 @@ public class Koroman {
         put(Pattern.compile("\u11bd\u110b"), "\u110c");  // 35. 받침 탈락
         put(Pattern.compile("\u11be\u110b"), "\u110e");  // 36. 받침 탈락
         put(Pattern.compile("\u11c2\u110b"), "");  // 37. 받침 탈락
-        put(Pattern.compile("\u11c2\u1100|\u11a8\u1112"), "\u110f");  // 38. 격음화
-        put(Pattern.compile("\u11c2\u1103|\u11ae\u1112"), "\u1110");  // 39. 격음화
-        put(Pattern.compile("\u11c2\u110c|\u11bd\u1112"), "\u110e");  // 40. 격음화
-        put(Pattern.compile("\u11c2\u1107"), "\u1107");  // 41. 격음화
-        put(Pattern.compile("\u11b8\u1112"), "\u1111");  // 42. 격음화
-        put(Pattern.compile("\u11af\u1105"), "ll");  // 43. 특수 처리
-        put(Pattern.compile("\u11c2(?!\\s|$)"), "");  // 44. 특수 처리
+        put(Pattern.compile("\u11c2\u1100"), "\u110f");  // 38. 격음화
+        put(Pattern.compile("\u11a8\u1112"), "\u110f\u1112");  // 39. 격음화
+        put(Pattern.compile("\u11c2\u1103"), "\u1110");  // 40. 격음화
+        put(Pattern.compile("\u11ae\u1112"), "\u1110\u1112");  // 41. 격음화
+        put(Pattern.compile("\u11c2\u110c|\u11bd\u1112"), "\u110e");  // 42. 격음화
+        put(Pattern.compile("\u11c2\u1107"), "\u1107");  // 43. 격음화
+        put(Pattern.compile("\u11b8\u1112"), "\u1111\u1112");  // 44. 격음화
+        put(Pattern.compile("\u11af\u1105"), "ll");  // 45. 특수 처리
+        put(Pattern.compile("\u11c2(?!\\s|$)"), "");  // 46. 특수 처리
     }};
 
     public static String applyPronunciationRules(String jamoStr) {
