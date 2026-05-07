@@ -35,6 +35,17 @@ assert.strictEqual(romanize("한글", { casingOption: "lowercase" }), "hangeul")
 assert.strictEqual(romanize("한글", { casingOption: "uppercase" }), "HANGEUL");
 assert.strictEqual(romanize("한글 로마자 안녕하세요", { casingOption: "capitalize-word" }), "Hangeul Romaja Annyeonghaseyo");
 assert.strictEqual(romanize("한글 로마자 안녕하세요", { casingOption: "capitalize-line" }), "Hangeul romaja annyeonghaseyo");
+
+// 1.0.14: short alias / numeric casingOption
+assert.strictEqual(romanize("한글", { casingOption: "u" }), "HANGEUL");
+assert.strictEqual(romanize("한글", { casingOption: "uc" }), "HANGEUL");
+assert.strictEqual(romanize("한글", { casingOption: 1 }), "HANGEUL");
+assert.strictEqual(romanize("한글", { casingOption: "lc" }), "hangeul");
+assert.strictEqual(romanize("한글", { casingOption: 0 }), "hangeul");
+assert.strictEqual(romanize("한글 로마자 안녕하세요", { casingOption: "CW" }), "Hangeul Romaja Annyeonghaseyo");
+assert.strictEqual(romanize("한글 로마자 안녕하세요", { casingOption: 3 }), "Hangeul Romaja Annyeonghaseyo");
+assert.strictEqual(romanize("한글 로마자 안녕하세요", { casingOption: "cl" }), "Hangeul romaja annyeonghaseyo");
+assert.strictEqual(romanize("한글 로마자 안녕하세요", { casingOption: 2 }), "Hangeul romaja annyeonghaseyo");
 console.log('✅ Casing tests passed');
 
 // Pronunciation Rules Tests

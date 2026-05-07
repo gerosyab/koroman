@@ -19,6 +19,25 @@ JONG = [
     "ᆿ", "ᇀ", "ᇁ", "ᇂ"
 ]
 
+_CASING_ALIASES = {
+    'lowercase': 'lowercase', 'lower': 'lowercase', 'l': 'lowercase', 'lc': 'lowercase', '0': 'lowercase',
+    'uppercase': 'uppercase', 'upper': 'uppercase', 'u': 'uppercase', 'uc': 'uppercase', '1': 'uppercase',
+    'capitalize-line': 'capitalize-line', 'cap-line': 'capitalize-line', 'cline': 'capitalize-line', 'cl': 'capitalize-line', '2': 'capitalize-line',
+    'capitalize-word': 'capitalize-word', 'cap-word': 'capitalize-word', 'cword': 'capitalize-word', 'cw': 'capitalize-word', '3': 'capitalize-word',
+}
+
+
+def _normalize_casing_option(opt):
+    """Normalize casing_option input to one of the canonical names.
+
+    Accepts full strings, short aliases, and integers (case-insensitive).
+    Falls back to 'lowercase' for None or unknown values.
+    """
+    if opt is None:
+        return 'lowercase'
+    return _CASING_ALIASES.get(str(opt).lower(), 'lowercase')
+
+
 ROMAN_MAP = {
     "ᄀ": "g", "ᄁ": "kk", "ᄂ": "n", "ᄃ": "d", "ᄄ": "tt",
     "ᄅ": "r", "ᄆ": "m", "ᄇ": "b", "ᄈ": "pp", "ᄉ": "s", "ᄊ": "ss",
@@ -196,24 +215,30 @@ def romanize(text, **options):
         text (str): Korean text to romanize
         **options: Optional parameters:
             - use_pronunciation_rules (bool): Whether to apply pronunciation rules (default: True)
-            - casing_option (str): Casing option (default: "lowercase")
-    
+            - casing_option (str|int): Casing option (default: "lowercase").
+              Accepts full names, short aliases, or integers:
+                * lowercase       : "lowercase" | "lower" | "l" | "lc" | 0
+                * uppercase       : "uppercase" | "upper" | "u" | "uc" | 1
+                * capitalize-line : "capitalize-line" | "cap-line" | "cline" | "cl" | 2
+                * capitalize-word : "capitalize-word" | "cap-word" | "cword" | "cw" | 3
+
+
     Returns:
         str: Romanized text
     """
     use_pronunciation_rules = options.get('use_pronunciation_rules', True)
-    casing_option = options.get('casing_option', "lowercase")
-    
+    casing_option = _normalize_casing_option(options.get('casing_option', "lowercase"))
+
     jamo_str = split_hangul_to_jamos(text)
     if use_pronunciation_rules:
         jamo_str = apply_pronunciation_rules(jamo_str)
     result = "".join(ROMAN_MAP.get(c, c) for c in jamo_str)
-    
+
     if casing_option == "uppercase":
         return result.upper()
     elif casing_option == "capitalize-word":
         return capitalize_words(result)
     elif casing_option == "capitalize-line":
         return capitalize_lines(result)
-    else:  # LOWERCASE
+    else:
         return result.lower()

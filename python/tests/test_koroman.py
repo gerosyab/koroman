@@ -14,6 +14,21 @@ class TestKoroman(unittest.TestCase):
         self.assertEqual(romanize("한글 로마자 안녕하세요", casing_option="capitalize-word"), "Hangeul Romaja Annyeonghaseyo")
         self.assertEqual(romanize("한글 로마자 안녕하세요", casing_option="capitalize-line"), "Hangeul romaja annyeonghaseyo")
 
+    def test_casing_aliases(self):
+        # 1.0.14: short alias / numeric casing_option
+        self.assertEqual(romanize("한글", casing_option="u"), "HANGEUL")
+        self.assertEqual(romanize("한글", casing_option="uc"), "HANGEUL")
+        self.assertEqual(romanize("한글", casing_option="UPPER"), "HANGEUL")
+        self.assertEqual(romanize("한글", casing_option=1), "HANGEUL")
+        self.assertEqual(romanize("한글", casing_option="l"), "hangeul")
+        self.assertEqual(romanize("한글", casing_option=0), "hangeul")
+        self.assertEqual(romanize("한글 로마자 안녕하세요", casing_option="cw"), "Hangeul Romaja Annyeonghaseyo")
+        self.assertEqual(romanize("한글 로마자 안녕하세요", casing_option=3), "Hangeul Romaja Annyeonghaseyo")
+        self.assertEqual(romanize("한글 로마자 안녕하세요", casing_option="cl"), "Hangeul romaja annyeonghaseyo")
+        self.assertEqual(romanize("한글 로마자 안녕하세요", casing_option=2), "Hangeul romaja annyeonghaseyo")
+        # Unknown alias → fallback to lowercase
+        self.assertEqual(romanize("한글", casing_option="bogus"), "hangeul")
+
     def test_pronunciation_rules(self):
         self.assertEqual(romanize("해돋이"), "haedoji")
         self.assertEqual(romanize("해돋이", use_pronunciation_rules=False), "haedodi")

@@ -10,7 +10,7 @@ var koroman = (function (exports) {
   //               apply Korean pronunciation rules, and convert them into Latin (Romanized) script.
   //               This module is used by both CommonJS and ESModule entry points and is not intended to be used directly.
   // @license: MIT License
-  // @version: 1.0.13
+  // @version: 1.0.14
   // @dependencies: None
   // @usage: Import this from koroman.mjs or koroman.cjs to access the romanize() function.
   // 자모 분해 및 조합 + 로마자 변환 (초성/중성/종성 실제 유니코드 문자 사용 버전)
@@ -36,9 +36,23 @@ var koroman = (function (exports) {
 
     const ZWSP = '\u200A'; // Hair Space (조합 방지용)
   //   const ZWSP = '\u200B'; // zero-width space (조합 방지용)
-    
+
+    // casingOption 별칭/숫자 매핑 (1.0.14~) — 풀네임/약어/숫자 모두 허용, case-insensitive
+    const CASING_ALIASES = {
+      'lowercase': 'lowercase', 'lower': 'lowercase', 'l': 'lowercase', 'lc': 'lowercase', '0': 'lowercase',
+      'uppercase': 'uppercase', 'upper': 'uppercase', 'u': 'uppercase', 'uc': 'uppercase', '1': 'uppercase',
+      'capitalize-line': 'capitalize-line', 'cap-line': 'capitalize-line', 'cline': 'capitalize-line', 'cl': 'capitalize-line', '2': 'capitalize-line',
+      'capitalize-word': 'capitalize-word', 'cap-word': 'capitalize-word', 'cword': 'capitalize-word', 'cw': 'capitalize-word', '3': 'capitalize-word'
+    };
+
+    function normalizeCasingOption(opt) {
+      if (opt === null || opt === undefined) return 'lowercase';
+      const key = String(opt).toLowerCase();
+      return CASING_ALIASES[key] ?? 'lowercase';
+    }
+
     function formatRoman(str, casingOption = "lowercase") {
-      switch (casingOption) {
+      switch (normalizeCasingOption(casingOption)) {
         case "uppercase": return str.toUpperCase();
         case "capitalize-line": return str.split('\n').map(line => line.length > 0 ? line.charAt(0).toUpperCase() + line.slice(1) : '').join('\n');
         case "capitalize-word": return str.split('\n').map(line => line.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')).join('\n');
@@ -243,6 +257,7 @@ var koroman = (function (exports) {
   exports.applyRomanMapping = applyRomanMapping;
   exports.composeJamos = composeJamos;
   exports.formatRoman = formatRoman;
+  exports.normalizeCasingOption = normalizeCasingOption;
   exports.romanize = romanize;
   exports.splitHangulToJamos = splitHangulToJamos;
 

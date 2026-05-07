@@ -4,9 +4,9 @@
 // @date: 2025-04-02
 // @description: This code provides functions to decompose Hangul syllables into their constituent jamo (consonants and vowels), recompose them, and convert them into Romanized forms. It includes pronunciation rules for accurate Romanization and allows for different casing options.
 // @license: MIT License
-// @version: 1.0.12
+// @version: 1.0.14
 // @dependencies: None
-// @usage: This code can be used in any JavaScript environment (Node.js, browser) to romanize Korean text. It provides functions for splitting Hangul into jamo, recomposing them, and converting them to Romanized forms with various options for pronunciation rules and casing.
+// @usage: Use Koroman.romanize(...) to convert Korean text to Romanized form.
 // 자모 분해 및 조합 + 로마자 변환 (초성/중성/종성 실제 유니코드 문자 사용 버전)
 
 package app.daissue.koroman;
@@ -22,10 +22,50 @@ public class Koroman {
     private static final char HANGUL_END = 0xD7A3;
 
     public enum CasingOption {
-        LOWERCASE,
-        UPPERCASE,
-        CAPITALIZE_WORDS,
-        CAPITALIZE_LINES
+        LOWERCASE(0),
+        UPPERCASE(1),
+        CAPITALIZE_LINES(2),
+        CAPITALIZE_WORDS(3);
+
+        private final int code;
+
+        CasingOption(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        /**
+         * Resolve a CasingOption from various input types: enum, Integer, or String.
+         * Accepts full names, short aliases, and numeric strings (case-insensitive).
+         * Falls back to LOWERCASE for null or unknown values.
+         */
+        public static CasingOption from(Object value) {
+            if (value == null) return LOWERCASE;
+            if (value instanceof CasingOption) return (CasingOption) value;
+            if (value instanceof Integer) {
+                int i = (Integer) value;
+                for (CasingOption c : values()) {
+                    if (c.code == i) return c;
+                }
+                return LOWERCASE;
+            }
+            String s = value.toString().toLowerCase();
+            switch (s) {
+                case "lowercase": case "lower": case "l": case "lc": case "0":
+                    return LOWERCASE;
+                case "uppercase": case "upper": case "u": case "uc": case "1":
+                    return UPPERCASE;
+                case "capitalize-line": case "cap-line": case "cline": case "cl": case "2":
+                    return CAPITALIZE_LINES;
+                case "capitalize-word": case "cap-word": case "cword": case "cw": case "3":
+                    return CAPITALIZE_WORDS;
+                default:
+                    return LOWERCASE;
+            }
+        }
     }
 
     private static final String[] CHO = {
@@ -115,15 +155,8 @@ public class Koroman {
 
     public static String applyPronunciationRules(String jamoStr) {
         String result = jamoStr;
-        System.out.println("Input: " + toUnicodeString(jamoStr));  // Debug log
         for (Map.Entry<Pattern, String> rule : PRONUNCIATION_RULES.entrySet()) {
-            String before = result;
             result = rule.getKey().matcher(result).replaceAll(rule.getValue());
-            if (!before.equals(result) && rule.getKey().pattern().contains("\\u11ae\\u110b\\u1175")) {
-                System.out.println("굳이 rule applied:");
-                System.out.println("Before: " + toUnicodeString(before));
-                System.out.println("After: " + toUnicodeString(result));
-            }
         }
         return result;
     }
@@ -140,21 +173,40 @@ public class Koroman {
         return romanize(text, true, casingOption);
     }
 
+    /**
+     * Convenience overload accepting a String alias for casing (e.g. "u", "upper", "uc", "1").
+     * See {@link CasingOption#from(Object)} for the full alias list.
+     */
+    public static String romanize(String text, String casingOption) {
+        return romanize(text, true, CasingOption.from(casingOption));
+    }
+
+    /**
+     * Convenience overload accepting an int code for casing (0=LOWERCASE, 1=UPPERCASE, 2=CAPITALIZE_LINES, 3=CAPITALIZE_WORDS).
+     */
+    public static String romanize(String text, int casingOption) {
+        return romanize(text, true, CasingOption.from(casingOption));
+    }
+
+    public static String romanize(String text, boolean usePronunciationRules, String casingOption) {
+        return romanize(text, usePronunciationRules, CasingOption.from(casingOption));
+    }
+
+    public static String romanize(String text, boolean usePronunciationRules, int casingOption) {
+        return romanize(text, usePronunciationRules, CasingOption.from(casingOption));
+    }
+
     public static String romanize(String text, boolean usePronunciationRules, CasingOption casingOption) {
         if (text == null || text.isEmpty()) {
             return text;
         }
 
         String jamoStr = splitHangulToJamos(text);
-        System.out.println("Original jamo: " + toUnicodeString(jamoStr));  // Debug log
-        
+
         if (usePronunciationRules) {
-            String beforeRules = jamoStr;
             jamoStr = applyPronunciationRules(jamoStr);
-            System.out.println("Before rules: " + toUnicodeString(beforeRules));  // Debug log
-            System.out.println("After rules: " + toUnicodeString(jamoStr));  // Debug log
         }
-        
+
         String result = convertJamosToRoman(jamoStr);
         return applyCasing(result, casingOption);
     }
@@ -214,17 +266,4 @@ public class Koroman {
                 return text.toLowerCase();
         }
     }
-
-    public static String toUnicodeString(String str) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (c >= 0x1100 && c <= 0x11FF) {  // Hangul Jamo range
-                sb.append(String.format("\\u%04x", (int)c));
-            } else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
-} 
+}

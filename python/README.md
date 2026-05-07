@@ -17,7 +17,7 @@
   - Nasal assimilation (비음화)
   - Lateralization (유음화)
   - Fortis/tense consonants (경음화)
-- Provides casing options (lower, upper, capitalized)
+- Provides casing options (lower, upper, capitalized) — accepts full names, short aliases, or numeric codes (1.0.14+)
 - Fully tested in each language
 
 ---
@@ -40,14 +40,33 @@ romanize("해돋이", use_pronunciation_rules=False)  # → "haedodi"
 # With pronunciation rules enabled (default)
 romanize("해돋이")  # → "haedoji"
 
-# With different casing options
-romanize("한글", casing_option="uppercase")  # → "HANGUL"
+# With different casing options (full names)
+romanize("한글", casing_option="uppercase")  # → "HANGEUL"
 romanize("안녕 한글", casing_option="capitalize-word")  # → "Annyeong Hangeul"
-romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # → "Annyeong\nHangeul Romaja Byeonhwan"
+romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # → "Annyeong\nHangeul romaja byeonhwan"
+
+# 1.0.14+ : short aliases / numeric codes are also accepted
+romanize("한글", casing_option="u")    # → "HANGEUL"
+romanize("한글", casing_option="uc")   # → "HANGEUL"
+romanize("한글", casing_option=1)      # → "HANGEUL"
+romanize("안녕 한글", casing_option="cw")   # → "Annyeong Hangeul"
+romanize("안녕\n한글 로마자 변환", casing_option=2)  # → "Annyeong\nHangeul romaja byeonhwan"
 
 # Combining options
-romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase")  # → "HAEDODI"
+romanize("해돋이", use_pronunciation_rules=False, casing_option="uc")  # → "HAEDODI"
+romanize("해돋이", use_pronunciation_rules=False, casing_option=1)     # → "HAEDODI"
 ```
+
+### casingOption aliases (1.0.14+)
+
+| Canonical          | Aliases                              | Numeric   |
+|--------------------|--------------------------------------|-----------|
+| `lowercase`        | `lower`, `l`, `lc`                   | `0`       |
+| `uppercase`        | `upper`, `u`, `uc`                   | `1`       |
+| `capitalize-line`  | `cap-line`, `cline`, `cl`            | `2`       |
+| `capitalize-word`  | `cap-word`, `cword`, `cw`            | `3`       |
+
+Case-insensitive. Unknown / `None` falls back to `lowercase`.
 ---
 
 ## 📜 LICENSE

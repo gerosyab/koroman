@@ -46,6 +46,33 @@ public class KoromanTest {
     }
 
     @Test
+    public void testCasingAliases() {
+        // 1.0.14: String / int overloads
+        assertEquals("HANGEUL", Koroman.romanize("한글", "u"));
+        assertEquals("HANGEUL", Koroman.romanize("한글", "uc"));
+        assertEquals("HANGEUL", Koroman.romanize("한글", "UPPER"));
+        assertEquals("HANGEUL", Koroman.romanize("한글", 1));
+        assertEquals("hangeul", Koroman.romanize("한글", "l"));
+        assertEquals("hangeul", Koroman.romanize("한글", 0));
+        assertEquals("Hangeul Hangeul Hangeul Hangeul", Koroman.romanize("한글 한글 한글 한글", "cw"));
+        assertEquals("Hangeul Hangeul Hangeul Hangeul", Koroman.romanize("한글 한글 한글 한글", 3));
+        assertEquals("Hangeul\nHangeul hangeul hangeul", Koroman.romanize("한글\n한글 한글 한글", "cl"));
+        assertEquals("Hangeul\nHangeul hangeul hangeul", Koroman.romanize("한글\n한글 한글 한글", 2));
+
+        // 3-arg overloads with usePronunciationRules
+        assertEquals("HAEDODI", Koroman.romanize("해돋이", false, "uc"));
+        assertEquals("HAEDODI", Koroman.romanize("해돋이", false, 1));
+
+        // CasingOption.from() factory
+        assertEquals(Koroman.CasingOption.UPPERCASE, Koroman.CasingOption.from("u"));
+        assertEquals(Koroman.CasingOption.UPPERCASE, Koroman.CasingOption.from(1));
+        assertEquals(Koroman.CasingOption.CAPITALIZE_LINES, Koroman.CasingOption.from("cl"));
+        assertEquals(Koroman.CasingOption.CAPITALIZE_WORDS, Koroman.CasingOption.from("cw"));
+        assertEquals(Koroman.CasingOption.LOWERCASE, Koroman.CasingOption.from(null));
+        assertEquals(Koroman.CasingOption.LOWERCASE, Koroman.CasingOption.from("bogus"));
+    }
+
+    @Test
     public void testMultiline() {
         System.out.println("\n=== Multiline Tests ===");
         testAndPrint("한글\n한글", "hangeul\nhangeul");

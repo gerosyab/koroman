@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name='koroman',
-    version='1.0.13',
+    version='1.0.14',
     description='Korean Romanizer with pronunciation rules based on 국립국어원 표기법',
     author='Donghe Youn (Daissue)',
     author_email='gerosyab@gmail.com',
@@ -26,7 +26,7 @@ setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.6',
-        keywords='korean, romanizer, romanization, hangul, transliteration, linguistics, korean romanizer, korean romanization, korean transliteration, korean linguistics, koroman',
+    keywords='korean, romanizer, romanization, hangul, transliteration, linguistics, korean romanizer, korean romanization, korean transliteration, korean linguistics, koroman, 로마자, 로마자표기, 로마자표기법, 로마자변환, 로마자 변환, 한글, 한글 로마자, 한글 로마자 변환',
     project_urls={
         'Bug Reports': 'https://github.com/gerosyab/koroman/issues',
         'Source': 'https://github.com/gerosyab/koroman',

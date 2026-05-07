@@ -13,9 +13,24 @@
 - 발음 규칙 적용 지원:
   - 연음화 (예: 해돋이 → haedoji)
   - 비음화, 유음화, 경음화 등
-- 대소문자 옵션 지원 (소문자, 대문자, 단어/줄 단위 대문자 등)
+- 대소문자 옵션 지원 (소문자, 대문자, 단어/줄 단위 대문자 등) — 1.0.14부터 짧은 별칭/숫자 코드도 허용
 - 자바스크립트, 파이썬, 자바 모두 지원 (ESM/CJS 대응)
 - 각 언어별 테스트 코드 포함
+
+---
+
+## 🔤 casingOption 별칭 (1.0.14+)
+
+세 언어 모두 `casingOption` 값으로 다음을 허용합니다 (대소문자 무시):
+
+| 표준값             | 별칭                                  | 숫자 코드 |
+|--------------------|--------------------------------------|-----------|
+| `lowercase`        | `lower`, `l`, `lc`                   | `0`       |
+| `uppercase`        | `upper`, `u`, `uc`                   | `1`       |
+| `capitalize-line`  | `cap-line`, `cline`, `cl`            | `2`       |
+| `capitalize-word`  | `cap-word`, `cword`, `cw`            | `3`       |
+
+알 수 없는 값 / `null` / `undefined` → 기본값 `lowercase`.
 
 ---
 
@@ -64,7 +79,7 @@ koroman/
 
 ### JavaScript (jsDeliver)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.13/js/dist/koroman.browser.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.14/js/dist/koroman.browser.js"></script>
 <script>
   const result = koroman.romanize("안녕하세요");
   console.log(result); // → annyeonghaseyo
@@ -133,7 +148,7 @@ romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # 
 romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase")  # → "HAEDODI"
 ```
 
-### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.13)
+### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.14)
 ```gradle
 repositories {
     mavenCentral()
@@ -141,44 +156,37 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.gerosyab:koroman:java-v1.0.13'
+    implementation 'com.github.gerosyab:koroman:java-v1.0.14'
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+```
 ```java
 import app.daissue.koroman.Koroman;
-import java.util.HashMap;
-import java.util.Map;
+import app.daissue.koroman.Koroman.CasingOption;
 
 // 기본 사용법 (기본값: 발음 규칙 적용, 소문자)
-String result = Koroman.romanize("한글"); // → "hangul"
+Koroman.romanize("한글"); // → "hangeul"
 
 // 발음 규칙 비활성화
-Map<String, Object> options = new HashMap<>();
-options.put("usePronunciationRules", false);
-String result = Koroman.romanize("해돋이", options); // → "haedodi"
+Koroman.romanize("해돋이", false); // → "haedodi"
 
 // 발음 규칙 활성화 (기본값)
-String result = Koroman.romanize("해돋이"); // → "haedoji"
+Koroman.romanize("해돋이"); // → "haedoji"
 
-// 대소문자 옵션
-options = new HashMap<>();
-options.put("casingOption", "uppercase");
-String result = Koroman.romanize("한글", options); // → "HANGUL"
+// 대소문자 옵션 (enum)
+Koroman.romanize("한글", CasingOption.UPPERCASE);              // → "HANGEUL"
+Koroman.romanize("안녕 한글", CasingOption.CAPITALIZE_WORDS);  // → "Annyeong Hangeul"
+Koroman.romanize("안녕\n한글 로마자 변환", CasingOption.CAPITALIZE_LINES); // → "Annyeong\nHangeul romaja byeonhwan"
 
-options.put("casingOption", "capitalize-word");
-String result = Koroman.romanize("안녕 한글", options); // → "Annyeong Hangeul"
-
-options.put("casingOption", "capitalize-line");
-String result = Koroman.romanize("안녕\n한글 로마자 변환", options); // → "Annyeong\nHangeul Romaja Byeonhwan"
-
-// 옵션 조합
-options = new HashMap<>();
-options.put("usePronunciationRules", false);
-options.put("casingOption", "uppercase");
-String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
+// 1.0.14: 문자열/숫자 오버로드 (별칭 지원)
+Koroman.romanize("한글", "upper");           // → "HANGEUL"
+Koroman.romanize("한글", "uc");              // → "HANGEUL"
+Koroman.romanize("한글", 1);                 // → "HANGEUL"
+Koroman.romanize("해돋이", false, "uc");     // → "HAEDODI"
+Koroman.romanize("해돋이", false, 1);        // → "HAEDODI"
 ```
 ---
 
@@ -187,6 +195,7 @@ String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 | 기능 / 변경사항                  | JS (npm)  | Python (PyPI)  | Java (JitPack) | 설명                                              |
 |----------------------------------|-----------|----------------|----------------|---------------------------------------------------|
 | 최초 안정 릴리스                 | 1.0.13    | 1.0.13          | 1.0.13          | 국립국어원 표기법 기반의 기본 로마자 변환 기능     |
+| casingOption 별칭 / 숫자 지원    | 1.0.14    | 1.0.14          | 1.0.14          | casingOption 에 짧은 별칭/숫자 코드 허용 (Java는 String/int 오버로드 추가) |
 
 > ℹ️ 각 언어의 버전은 독립적으로 관리됩니다.  
 > 주요 기능은 가능한 한 모든 언어에서 일관되게 제공되도록 유지하지만, 릴리스 시점은 다를 수 있습니다.

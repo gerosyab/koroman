@@ -17,9 +17,24 @@
   - Nasal assimilation (비음화)
   - Lateralization (유음화)
   - Fortis/tense consonants (경음화)
-- Provides casing options (lower, upper, capitalized)
+- Provides casing options (lower, upper, capitalized) — accepts full names, short aliases, or numeric codes (1.0.14+)
 - Cross-platform support (Node.js, Python, Java)
 - Fully tested in each language
+
+---
+
+## 🔤 casingOption aliases (1.0.14+)
+
+All three implementations accept the following values for `casingOption` (case-insensitive):
+
+| Canonical          | Aliases                              | Numeric   |
+|--------------------|--------------------------------------|-----------|
+| `lowercase`        | `lower`, `l`, `lc`                   | `0`       |
+| `uppercase`        | `upper`, `u`, `uc`                   | `1`       |
+| `capitalize-line`  | `cap-line`, `cline`, `cl`            | `2`       |
+| `capitalize-word`  | `cap-word`, `cword`, `cw`            | `3`       |
+
+Unknown / `null` / `undefined` falls back to `lowercase`.
 
 ---
 
@@ -68,7 +83,7 @@ koroman/
 
 ### JavaScript (jsDeliver)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.13/js/dist/koroman.browser.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gerosyab/koroman@js-v1.0.14/js/dist/koroman.browser.js"></script>
 <script>
   const result = koroman.romanize("안녕하세요");
   console.log(result); // → annyeonghaseyo
@@ -137,7 +152,7 @@ romanize("안녕\n한글 로마자 변환", casing_option="capitalize-line")  # 
 romanize("해돋이", use_pronunciation_rules=False, casing_option="uppercase")  # → "HAEDODI"
 ```
 
-### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.13)
+### Java (JitPack -> https://jitpack.io/#gerosyab/koroman/java-v1.0.14)
 ```gradle
 repositories {
     mavenCentral()
@@ -145,7 +160,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.gerosyab:koroman:java-v1.0.13'
+    implementation 'com.github.gerosyab:koroman:java-v1.0.14'
 }
 
 tasks.withType(JavaCompile) {
@@ -154,36 +169,28 @@ tasks.withType(JavaCompile) {
 ```
 ```java
 import app.daissue.koroman.Koroman;
-import java.util.HashMap;
-import java.util.Map;
+import app.daissue.koroman.Koroman.CasingOption;
 
 // Basic usage (default: with pronunciation rules, lowercase)
-String result = Koroman.romanize("한글"); // → "hangul"
+Koroman.romanize("한글"); // → "hangeul"
 
 // With pronunciation rules disabled
-Map<String, Object> options = new HashMap<>();
-options.put("usePronunciationRules", false);
-String result = Koroman.romanize("해돋이", options); // → "haedodi"
+Koroman.romanize("해돋이", false); // → "haedodi"
 
 // With pronunciation rules enabled (default)
-String result = Koroman.romanize("해돋이"); // → "haedoji"
+Koroman.romanize("해돋이"); // → "haedoji"
 
-// With different casing options
-options = new HashMap<>();
-options.put("casingOption", "uppercase");
-String result = Koroman.romanize("한글", options); // → "HANGUL"
+// With different casing options (enum)
+Koroman.romanize("한글", CasingOption.UPPERCASE);              // → "HANGEUL"
+Koroman.romanize("안녕 한글", CasingOption.CAPITALIZE_WORDS);  // → "Annyeong Hangeul"
+Koroman.romanize("안녕\n한글 로마자 변환", CasingOption.CAPITALIZE_LINES); // → "Annyeong\nHangeul romaja byeonhwan"
 
-options.put("casingOption", "capitalize-word");
-String result = Koroman.romanize("안녕 한글", options); // → "Annyeong Hangeul"
-
-options.put("casingOption", "capitalize-line");
-String result = Koroman.romanize("안녕\n한글 로마자 변환", options); // → "Annyeong\nHangeul Romaja Byeonhwan"
-
-// Combining options
-options = new HashMap<>();
-options.put("usePronunciationRules", false);
-options.put("casingOption", "uppercase");
-String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
+// 1.0.14: String / int overloads with aliases
+Koroman.romanize("한글", "upper");           // → "HANGEUL"
+Koroman.romanize("한글", "uc");              // → "HANGEUL"
+Koroman.romanize("한글", 1);                 // → "HANGEUL"
+Koroman.romanize("해돋이", false, "uc");     // → "HAEDODI"
+Koroman.romanize("해돋이", false, 1);        // → "HAEDODI"
 ```
 ---
 
@@ -192,6 +199,7 @@ String result = Koroman.romanize("해돋이", options); // → "HAEDODI"
 | Feature / Change                 | JS (npm)  | Python (PyPI)  | Java (JitPack) | Description                                 |
 |----------------------------------|-----------|----------------|----------------|---------------------------------------------|
 | Initial stable release           | 1.0.13    | 1.0.13          | 1.0.13          | Basic romanization based on 국립국어원 표기법  |
+| casingOption aliases & numeric   | 1.0.14    | 1.0.14          | 1.0.14          | Accept short aliases / integer codes for casingOption (Java adds String/int overloads) |
 
 > ℹ️ Each version is managed independently per language.  
 > Major feature additions aim to stay consistent across platforms, but release timing may vary.
